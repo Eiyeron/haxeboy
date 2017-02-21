@@ -1,6 +1,10 @@
 package haxeboy;
 
+<<<<<<< HEAD
 import haxeboy.Cartridge;
+=======
+import haxeboy.Tools.*;
+>>>>>>> simplified haxeboy.Memory::getValue by use of Tools.inRange, and inlined haxeboy.Memory::getValue16
 
 using haxeboy.Tools;
 
