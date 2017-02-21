@@ -1,0 +1,4 @@
+
+all:
+	haxe build.hxml
+
