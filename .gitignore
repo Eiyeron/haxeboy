@@ -1,9 +1,9 @@
-
+# Build results
 *.n
-*.sublime-project
-*.sublime-workspace
-
 build
 
-# SWAP Files
+# IDE or text editor stuff
+*.vscode
+*.sublime-project
+*.sublime-workspace
 *.swp
