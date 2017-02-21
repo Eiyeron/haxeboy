@@ -10,6 +10,8 @@ class ROM implements MemoryMappable implements MemoryBankBased {
 
 	var real_number_of_rom_banks:Int;
 
+	var cart_inserted(get, never):Bool;
+
 	public function new() {
 		banks = [];
 		real_number_of_rom_banks = 0;
@@ -24,11 +26,21 @@ class ROM implements MemoryMappable implements MemoryBankBased {
 		}		
 	}
 
+	public function removeCart() {
+		banks = [];
+	}
+
     public function getValue(address:Int):Int {
         return banks[Std.int(address/1024)].get(address%1024);
     }
 
     public function getValueAtBank(bank:Int, address:Int) {
         return banks[bank].get(address);
+    }
+
+    // Getters
+
+    public function get_cart_inserted():Bool {
+        return real_number_of_rom_banks != 0;
     }
 }
