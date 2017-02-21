@@ -71,7 +71,7 @@ class Memory {
             return 0xFF;
         }
         // IO ports
-        else if (address >= 0xFF00 && address <= 0xFF7F) {
+        else if (address.inRange(0xFF00,0xFF7F)) {
             // return iop.getValue(address - 0xFF00);            
             return 0xFF;
         }
@@ -95,51 +95,51 @@ class Memory {
     */
     public function setValue(address:Int, value:Int) {
         // ROM bank 0, always present
-        if(address >= 0x0000 && address <= 0x3FFFF) {
+        if(address.inRange(0x0000, 0x3FFFF)) {
             return rom.setValue(address, value);            
         }
         // ROM bank 1-n, swappable
-        else if(address >= 0x4000 && address <= 0x7FFF) {
+        else if(address.inRange(0x4000, 0x7FFF)) {
             return rom.setValue(address, value);            
         }
         // VRAM
-        else if(address >= 0x8000 && address <= 0x9FFF) {
+        else if(address.inRange(0x8000, 0x9FFF)) {
             return vram.setValue(address - 0x8000, value);            
         }
         // External RAM
-        else if(address >= 0xA000 && address <= 0xBFFF) {
+        else if(address.inRange(0xA000, 0xBFFF)) {
             // Beware, this part can be changed from the cart side.
             // return external_ram.setValue(address - 0xA000, value);
             return;
         }
         // Work RAM bank 0, always present
-        else if(address >= 0xC000 && address <= 0xCFFF) {
+        else if(address.inRange(0xC000, 0xCFFF)) {
             return wram.setValue(address - 0xC000, value);            
         }
         // Work RAM bank 1
-        else if(address >= 0xD000 && address <= 0xDFFF) {
+        else if(address.inRange(0xD000, 0xDFFF)) {
             return wram.setValue(address - 0xC000, value);            
         }
         // Work RAM bank 0 echo
-        else if(address >= 0xE000 && address <= 0xFDFF) {
+        else if(address.inRange(0xE000, 0xFDFF)) {
             return wram.setValue(0, address - 0xE000);            
         }
         // Sprite Attribute Table (OAM)
-        else if(address >= 0xFE00 && address <= 0xFE9F) {
+        else if(address.inRange(0xFE00, 0xFE9F)) {
             return oam.setValue(address - 0xFE00, value);            
         }
         // Not accessible, should throw an exception, I think
-        else if(address >= 0xFEA0 && address <= 0xFEFF) {
+        else if(address.inRange(0xFEA0, 0xFEFF)) {
             // meh
             return ;
         }
         // IO ports
-        else if(address >= 0xFF00 && address <= 0xFF7F) {
+        else if(address.inRange(0xFF00, 0xFF7F)) {
             // return iop.setValue(address - 0xFF00, value);            
             return;
         }
         // HRAM (High RAM)
-        else if(address >= 0xFF80 && address <= 0xFFFE) {
+        else if(address.inRange(0xFF80, 0xFFFE)) {
             return hram.setValue(address - 0xFF80, value);            
         }
         // Interrupt enabler
