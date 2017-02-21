@@ -56,8 +56,8 @@ class CPU {
         // TODO : stuff
         if(halted)
             return;
-
         var opcode:Int = memory.getValue(PC);
+
         switch (opcode) {
             case 0x00:
                 // nop
@@ -66,7 +66,7 @@ class CPU {
             case 0x01:
                 // ld BC,nn
                 BC = memory.getValue16(PC+1);
-                PC += 2;
+                PC += 3;
                 cycles += 12;
             case 0x02:
                 // Ld (BC),a
@@ -78,25 +78,32 @@ class CPU {
                 BC += 1;
                 PC += 1;
                 cycles += 8;
+
+            // ...
+            case 0x76:
+                // halt
+                halted = true;
+                PC += 1;
+                cycles += 4;
         }
     }
 
     /// Register getters ///
 
     public function get_AF():Int {
-        return ((A << 8) & 0xFF) | (F & 0xFF);
+        return ((A & 0xFF) << 8) | (F & 0xFF);
     }
 
     public function get_BC():Int {
-        return ((B << 8) & 0xFF) | (C & 0xFF);
+        return ((B & 0xFF) << 8) | (C & 0xFF);
     }
 
     public function get_DE():Int {
-        return ((D << 8) & 0xFF) | (E & 0xFF);
+        return ((D & 0xFF) << 8) | (E & 0xFF);
     }
 
     public function get_HL():Int {   
-        return ((H << 8) & 0xFF) | (L & 0xFF);
+        return ((H & 0xFF) << 8) | (L & 0xFF);
     }
 
     public function get_z():Int {
