@@ -10,11 +10,13 @@ class ROM implements MemoryMappable implements MemoryBankBased {
 
     var real_number_of_rom_banks:Int;
 
+    public var current_rom_bank(default, null):Int;
     var cart_inserted(get, never):Bool;
 
     public function new() {
         banks = [];
         real_number_of_rom_banks = 0;
+        current_rom_bank = 1;
     }
 
     public function loadCart(data:Bytes) {
@@ -30,7 +32,20 @@ class ROM implements MemoryMappable implements MemoryBankBased {
     }
 
     public function getValue(address:Int):Int {
-        return banks[Std.int(address/1024)].get(address%1024);
+        if(!cart_inserted) {
+            return 0;
+        }
+        var num_bank:Int = Std.int(address/1024);
+        // If the select rom bank is over the current amount of loaded banks
+        if(num_bank > Math.min(real_number_of_rom_banks, 2)) {
+            return 0;
+        } 
+
+        if(num_bank == 0) {
+            return banks[0].get(address % 1024);
+        } else {
+            return banks[current_rom_bank].get(address % 1024);
+        }
     }
 
     public function setValue(address:Int, value:Int) {

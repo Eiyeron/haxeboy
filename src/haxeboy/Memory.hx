@@ -8,7 +8,6 @@ class Memory {
     /// Mockup of eventual API ///
 
     public var rom(default, null):ROM;
-    public var current_rom_bank(default, null):Int;
 
     public var vram(default, null):VRAM;
     // var eram:ERAM;
@@ -19,7 +18,6 @@ class Memory {
 
     public function new() {
         rom = new ROM();
-        current_rom_bank = 0;
 
         vram = new VRAM();
 
@@ -31,13 +29,9 @@ class Memory {
     }
 
     public function getValue(address:Int):Int {
-        // ROM bank 0, always present
-        if (address.inRange(0x0000, 0x3FFF)) {
-            return rom.getValueAtBank(0, address);
-        }
-        // ROM bank 1-n, swappable
-        else if (address.inRange(0x4000, 0x7FFF)) {
-            return rom.getValueAtBank(current_rom_bank, address-0x4000);
+        // ROM
+        if (address.inRange(0x0000, 0x7FFF)) {
+            return rom.getValue(address);
         }
         // VRAM
         else if (address.inRange(0x8000, 0x9FFF)) {
@@ -94,12 +88,8 @@ class Memory {
        TODO simply the body of setValue using shorthand methods and verbose commenting
     */
     public function setValue(address:Int, value:Int) {
-        // ROM bank 0, always present
-        if(address.inRange(0x0000, 0x3FFFF)) {
-            return rom.setValue(address, value);
-        }
-        // ROM bank 1-n, swappable
-        else if(address.inRange(0x4000, 0x7FFF)) {
+        // ROM
+        if(address.inRange(0x0000, 0x7FFF)) {
             return rom.setValue(address, value);
         }
         // VRAM
