@@ -1,13 +1,13 @@
 package;
 
-import haxeboy.Memory;
+import haxeboy.Gameboy;
 
 class Main {
 	
-	var memory:Memory;
+	var gameboy:Gameboy;
 
 	public function new() {
-		memory = new Memory();
+		gameboy = new Gameboy();
 	}
 
 	static public function main() {
