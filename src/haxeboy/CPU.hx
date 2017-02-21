@@ -82,36 +82,40 @@ class CPU {
     }
 
     /// Register getters ///
+    /*
+       all register-getters should be inlined, as they will be invoked very frequently,
+       and that many extra funtion calls will bog down the JS interpreter
+    */
 
-    public function get_AF():Int {
+    public inline function get_AF():Int {
         return ((A << 8) & 0xFF) | (F & 0xFF);
     }
 
-    public function get_BC():Int {
+    public inline function get_BC():Int {
         return ((B << 8) & 0xFF) | (C & 0xFF);
     }
 
-    public function get_DE():Int {
+    public inline function get_DE():Int {
         return ((D << 8) & 0xFF) | (E & 0xFF);
     }
 
-    public function get_HL():Int {   
+    public inline function get_HL():Int {   
         return ((H << 8) & 0xFF) | (L & 0xFF);
     }
 
-    public function get_z():Int {
+    public inline function get_z():Int {
         return (F & (1 << 7)) >> 7;
     }
 
-    public function get_n():Int {
+    public inline function get_n():Int {
         return (F & (1 << 6)) >> 6;
     }
 
-    public function get_h():Int {
+    public inline function get_h():Int {
         return (F & (1 << 5)) >> 5;
     }
 
-    public function get_Cy():Int {
+    public inline function get_Cy():Int {
         return (F & (1 << 4)) >> 4;
     }
 
