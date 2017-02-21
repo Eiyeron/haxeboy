@@ -9,7 +9,7 @@ class Memory {
     public var vram(default, null):VRAM;
     // var eram:ERAM;
     public var wram(default, null):WRAM;
-    // var oam:ORAM;
+    public var oam(default, null):OAM;
     // var iop:IOP;
     public var hram(default, null):HRAM;
 
@@ -20,6 +20,8 @@ class Memory {
         vram = new VRAM();
 
         wram = new WRAM();
+
+        oam = new OAM();
 
         hram = new HRAM();
     }
@@ -57,8 +59,7 @@ class Memory {
         }
         // Sprite Attribute Table (OAM)
         else if(address >= 0xFE00 && address <= 0xFE9F) {
-            // return oam.getValue(address - 0xFE00);            
-            return 0xFF;
+            return oam.getValue(address - 0xFE00);            
         }
         // Not accessible, should throw an exception, I think
         else if(address >= 0xFEA0 && address <= 0xFEFF) {

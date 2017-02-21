@@ -6,7 +6,7 @@ class Gameboy {
 	var cpu:CPU;
 	var memory:Memory;
 
-	public var turned_on(default, never):Bool;
+	public var turned_on(default, null):Bool;
 
 	public function new()
 	{

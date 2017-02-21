@@ -135,7 +135,6 @@ class CPU {
             F &= ~(1 << 6);
             return 0;
         } else {
-
             F |= (1 << 6);
             return 1;
         }
@@ -146,7 +145,6 @@ class CPU {
             F &= ~(1 << 5);
             return 0;
         } else {
-
             F |= (1 << 5);
             return 1;
         }
@@ -157,7 +155,6 @@ class CPU {
             F &= ~(1 << 4);
             return 0;
         } else {
-
             F |= (1 << 4);
             return 1;
         }
