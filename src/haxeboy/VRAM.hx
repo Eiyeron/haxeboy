@@ -27,4 +27,9 @@ class VRAM implements MemoryMappable {
             return 0xFF;
         }
     }
+
+    public function setValue(address:Int, value:Int) {
+        // TODO : fill me
+    }
+
 }

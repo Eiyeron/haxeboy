@@ -33,6 +33,22 @@ class SpriteAttribute implements MemoryMappable {
     	}
     }
 
+    public function setValue(address:Int, value:Int) {
+        switch(address) {
+            case 0:
+            y = value;
+            case 1:
+            x = value;
+            case 2:
+            tile = value;
+            case 3:
+            attribute = value;
+            // This isn't supposed to happen
+            default:
+        }        
+    }
+
+
     /// Flag getters ///
 
     public function get_palette_number():Int

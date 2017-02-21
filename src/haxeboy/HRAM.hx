@@ -14,4 +14,9 @@ class HRAM implements MemoryMappable {
     {
         return bank.get(address);
     }
+
+    public function setValue(address:Int, value:Int) {
+        bank.set(address, value);
+    }
+
 }

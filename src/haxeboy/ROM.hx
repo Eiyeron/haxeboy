@@ -34,6 +34,11 @@ class ROM implements MemoryMappable implements MemoryBankBased {
         return banks[Std.int(address/1024)].get(address%1024);
     }
 
+    public function setValue(address:Int, value:Int) {
+    	// wahtever the address, this should never be called
+    	// Trigger an exception or whatever here
+    }
+
     public function getValueAtBank(bank:Int, address:Int) {
         return banks[bank].get(address);
     }
