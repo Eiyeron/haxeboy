@@ -3,8 +3,8 @@ package haxeboy;
 import haxe.io.Bytes;
 
 class Gameboy {
-	var cpu:CPU;
-	var memory:Memory;
+	public var cpu(default, null):CPU;
+	public var memory(default, null):Memory;
 
 	public var turned_on(default, null):Bool;
 
@@ -12,6 +12,7 @@ class Gameboy {
 	{
 	    cpu = new CPU();
 	    memory = new Memory();
+	    cpu.memory = memory;
 	    turned_on = false;
 	}
 
@@ -21,7 +22,7 @@ class Gameboy {
 	public function run() {
 		turned_on = true;
 		
-		while(turned_on) {
+		while(turned_on && !cpu.halted) {
 			cpu.step();
 		}
 	}
