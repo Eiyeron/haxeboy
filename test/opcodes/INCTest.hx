@@ -27,7 +27,7 @@ class INCTest extends haxe.unit.TestCase {
 
     function test_INC_B_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x04); // INC BC
+        routine.set(0x0000, 0x04); // INC B
         routine.set(0x0001, 0x76); // HALT
         gb.insertCart(routine);
 
@@ -45,7 +45,7 @@ class INCTest extends haxe.unit.TestCase {
 
     function test_INC_B_overflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x04); // INC BC
+        routine.set(0x0000, 0x04); // INC B
         routine.set(0x0001, 0x76); // HALT
         gb.insertCart(routine);
 
@@ -65,7 +65,7 @@ class INCTest extends haxe.unit.TestCase {
 
     function test_INC_B_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x04); // INC BC
+        routine.set(0x0000, 0x04); // INC B
         routine.set(0x0001, 0x76); // HALT
         gb.insertCart(routine);
 

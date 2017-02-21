@@ -114,9 +114,23 @@ class CPU {
                 // Zs n0 Hs C-
                 var Bp = B;
                 B = (B + 1) % 256;
-                h = (Bp & 0x0F == 0x0F ? 1 : 0); // If we're going to have a carry from bit 3 to 4
                 z = (B == 0 ? 1 : 0);
                 n = 0;
+                h = (Bp & 0x0F == 0x0F ? 1 : 0); // If we're going to have a carry from bit 3 to 4
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x05:
+                // dev B
+                // Zs n1 Hs C-
+                var Bp = B;
+                B = (B - 1) % 256;
+                if(B < 0)
+                    B += 256;
+                // If the lower nibble underflowed, so raise the half-carry.
+                h = ((Bp & 0x0F) < (B & 0x0F) ? 1 : 0); // If we're going to have a carry from bit 4 to 3
+                n = 1;
+                z = (B == 0xFF ? 1 : 0);
 
                 PC += 1;
                 cyclesToBurn = 4;
