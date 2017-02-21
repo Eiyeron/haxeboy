@@ -33,15 +33,15 @@ class Memory {
     public function getValue(address:Int):Int {
         // ROM bank 0, always present
         if (address.inRange(0x0000, 0x3FFF)) {
-        	return rom.getValueAtBank(0, address);
+            return rom.getValueAtBank(0, address);
         }
         // ROM bank 1-n, swappable
         else if (address.inRange(0x4000, 0x7FFF)) {
-            return rom.getValueAtBank(current_rom_bank, address-0x4000);            
+            return rom.getValueAtBank(current_rom_bank, address-0x4000);
         }
         // VRAM
         else if (address.inRange(0x8000, 0x9FFF)) {
-            return vram.getValue(address - 0x8000);            
+            return vram.getValue(address - 0x8000);
         }
         // External RAM
         else if (address.inRange(0xA000, 0xBFFF)) {
@@ -51,19 +51,19 @@ class Memory {
         }
         // Work RAM bank 0, always present
         else if (address.inRange(0xC000, 0xCFFF)) {
-            return wram.getValueAtBank(0, address - 0xC000);            
+            return wram.getValueAtBank(0, address - 0xC000);
         }
         // Work RAM bank 1
         else if (address.inRange(0xD000, 0xDFFF)) {
-            return wram.getValueAtBank(1, address - 0xD000);            
+            return wram.getValueAtBank(1, address - 0xD000);
         }
         // Work RAM bank 0 echo
         else if (address.inRange(0xE000, 0xFDFF)) {
-            return wram.getValueAtBank(0, address - 0xE000);            
+            return wram.getValueAtBank(0, address - 0xE000);
         }
         // Sprite Attribute Table (OAM)
         else if (address.inRange(0xFE00, 0xFE9F)) {
-            return oam.getValue(address - 0xFE00);            
+            return oam.getValue(address - 0xFE00);
         }
         // Not accessible, should throw an exception, I think
         else if (address.inRange(0xFEA0, 0xFEFF)) {
@@ -72,18 +72,18 @@ class Memory {
         }
         // IO ports
         else if (address.inRange(0xFF00,0xFF7F)) {
-            // return iop.getValue(address - 0xFF00);            
+            // return iop.getValue(address - 0xFF00);
             return 0xFF;
         }
         // HRAM (High RAM)
         else if (address.inRange(0xFF80, 0xFFFE)) {
-            return hram.getValue(address - 0xFF80);            
+            return hram.getValue(address - 0xFF80);
         }
         // Interrupt enabler
         else if (address == 0xFFFF) {
             // return interrupt_enabler;
             return 0xFF;
-        }        
+        }
         else {
             // throw MemoryAccesException('Out of Bounds');
             return 0xFF;
@@ -96,15 +96,15 @@ class Memory {
     public function setValue(address:Int, value:Int) {
         // ROM bank 0, always present
         if(address.inRange(0x0000, 0x3FFFF)) {
-            return rom.setValue(address, value);            
+            return rom.setValue(address, value);
         }
         // ROM bank 1-n, swappable
         else if(address.inRange(0x4000, 0x7FFF)) {
-            return rom.setValue(address, value);            
+            return rom.setValue(address, value);
         }
         // VRAM
         else if(address.inRange(0x8000, 0x9FFF)) {
-            return vram.setValue(address - 0x8000, value);            
+            return vram.setValue(address - 0x8000, value);
         }
         // External RAM
         else if(address.inRange(0xA000, 0xBFFF)) {
@@ -114,19 +114,19 @@ class Memory {
         }
         // Work RAM bank 0, always present
         else if(address.inRange(0xC000, 0xCFFF)) {
-            return wram.setValue(address - 0xC000, value);            
+            return wram.setValue(address - 0xC000, value);
         }
         // Work RAM bank 1
         else if(address.inRange(0xD000, 0xDFFF)) {
-            return wram.setValue(address - 0xC000, value);            
+            return wram.setValue(address - 0xC000, value);
         }
         // Work RAM bank 0 echo
         else if(address.inRange(0xE000, 0xFDFF)) {
-            return wram.setValue(0, address - 0xE000);            
+            return wram.setValue(0, address - 0xE000);
         }
         // Sprite Attribute Table (OAM)
         else if(address.inRange(0xFE00, 0xFE9F)) {
-            return oam.setValue(address - 0xFE00, value);            
+            return oam.setValue(address - 0xFE00, value);
         }
         // Not accessible, should throw an exception, I think
         else if(address.inRange(0xFEA0, 0xFEFF)) {
@@ -135,18 +135,18 @@ class Memory {
         }
         // IO ports
         else if(address.inRange(0xFF00, 0xFF7F)) {
-            // return iop.setValue(address - 0xFF00, value);            
+            // return iop.setValue(address - 0xFF00, value);
             return;
         }
         // HRAM (High RAM)
         else if(address.inRange(0xFF80, 0xFFFE)) {
-            return hram.setValue(address - 0xFF80, value);            
+            return hram.setValue(address - 0xFF80, value);
         }
         // Interrupt enabler
         else if(address == 0xFFFF){
             // interrupt_enabler = value;
             return ;
-        }        
+        }
         else {
             // throw MemoryAccesException('Out of Bounds');
             return ;

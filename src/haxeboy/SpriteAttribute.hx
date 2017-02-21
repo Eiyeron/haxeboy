@@ -1,36 +1,36 @@
 package haxeboy;
 
 class SpriteAttribute implements MemoryMappable {
-	// Position
-	var y:Int; // Byte 0
-	var x:Int; // Byte 1
+    // Position
+    var y:Int; // Byte 0
+    var x:Int; // Byte 1
 
-	var tile:Int; // Byte 2
-	var attribute:Int; // Byte 3
-	// Attribute flags
-	var palette_number(get, set):Int; // Bit 4
-	var x_flip(get, set):Int; // But 5
-	var y_flip(get, set):Int; // But 5
-	var obj_to_bg_priority(get, set):Int; // But 5
+    var tile:Int; // Byte 2
+    var attribute:Int; // Byte 3
+    // Attribute flags
+    var palette_number(get, set):Int; // Bit 4
+    var x_flip(get, set):Int; // But 5
+    var y_flip(get, set):Int; // But 5
+    var obj_to_bg_priority(get, set):Int; // But 5
 
-	public function new() {
+    public function new() {
 
-	}
+    }
 
     public function getValue(address:Int):Int {
-    	switch(address) {
-    		case 0:
-    		return y;
-    		case 1:
-    		return x;
-    		case 2:
-    		return tile;
-    		case 3:
-    		return attribute;
-    		// This isn't supposed to happen
-    		default:
-    		return 0xFF;
-    	}
+        switch(address) {
+            case 0:
+            return y;
+            case 1:
+            return x;
+            case 2:
+            return tile;
+            case 3:
+            return attribute;
+            // This isn't supposed to happen
+            default:
+            return 0xFF;
+        }
     }
 
     public function setValue(address:Int, value:Int) {
@@ -45,7 +45,7 @@ class SpriteAttribute implements MemoryMappable {
             attribute = value;
             // This isn't supposed to happen
             default:
-        }        
+        }
     }
 
 
@@ -53,22 +53,22 @@ class SpriteAttribute implements MemoryMappable {
 
     public function get_palette_number():Int
     {
-		return (attribute & (1 << 4)) >> 4;        
+        return (attribute & (1 << 4)) >> 4;
     }
 
     public function get_x_flip():Int
     {
-		return (attribute & (1 << 5)) >> 5;        
+        return (attribute & (1 << 5)) >> 5;
     }
 
     public function get_y_flip():Int
     {
-		return (attribute & (1 << 6)) >> 6;        
+        return (attribute & (1 << 6)) >> 6;
     }
 
     public function get_obj_to_bg_priority():Int
     {
-		return (attribute & (1 << 7)) >> 7;        
+        return (attribute & (1 << 7)) >> 7;
     }
 
     /// Flag setters ///

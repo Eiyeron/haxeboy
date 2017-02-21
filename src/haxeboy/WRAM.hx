@@ -23,7 +23,7 @@ class WRAM implements MemoryMappable implements MemoryBankBased {
     }
 
     public function setValue(address:Int, value:Int) {
-        banks[Std.int(address/1024)].set(address%1024, value);   
+        banks[Std.int(address/1024)].set(address%1024, value);
     }
 
 }

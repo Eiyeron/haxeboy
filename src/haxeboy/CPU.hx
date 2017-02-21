@@ -114,7 +114,7 @@ class CPU {
         return ((D & 0xFF) << 8) | (E & 0xFF);
     }
 
-    public function get_HL():Int {   
+    public function get_HL():Int {
         return ((H & 0xFF) << 8) | (L & 0xFF);
     }
 
