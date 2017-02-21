@@ -40,22 +40,44 @@ class CPU {
     // Halt status
     public var halted:Bool;
 
+    // cycles done
+    public var cycles:Int;
+
     public function new()
     {
+        cycles = 0;
         // TODO: start values.
     }
 
     /// Mockup of eventual API ///
-    var memory:Memory;
+    public var memory:Memory;
 
-    public function step(opcode:Int) {
+    public function step() {
         // TODO : stuff
+        if(halted)
+            return;
+
+        var opcode:Int = memory.getValue(PC);
         switch (opcode) {
             case 0x00:
                 // nop
+                PC += 1;
+                cycles += 4;
             case 0x01:
                 // ld BC,nn
-                BC = memory.getValue16(PC);
+                BC = memory.getValue16(PC+1);
+                PC += 2;
+                cycles += 12;
+            case 0x02:
+                // Ld (BC),a
+                memory.setValue(BC, A);
+                PC += 1;
+                cycles += 8;
+            case 0x03:
+                // inc BC
+                BC += 1;
+                PC += 1;
+                cycles += 8;
         }
     }
 

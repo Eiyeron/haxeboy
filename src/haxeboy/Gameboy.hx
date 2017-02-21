@@ -21,8 +21,8 @@ class Gameboy {
 	public function run() {
 		turned_on = true;
 		
-		while(true) {
-			cpu.step(memory.getValue(cpu.PC));
+		while(turned_on) {
+			cpu.step();
 		}
 	}
 
