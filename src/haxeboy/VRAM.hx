@@ -3,7 +3,11 @@ package haxeboy;
 // TODO
 class VRAM implements MemoryMappable {
     /// Mockup of eventual API ///
-    var accessible:Bool(get, never);
+    var accessible(get, never):Bool;
+
+    public function new() {
+
+    }
 
     private function get_accessible():Bool {
         // return if during HBLANK or VBLANK;
@@ -13,7 +17,7 @@ class VRAM implements MemoryMappable {
     // TODO : Get memory value
     // If the VRAM is accessible, the VRAM is supposed to yield 0xFF, whatever
     // was supposed to be on the given address.
-    public function getValue(address:Int) : Int
+    public function getValue(address:Int):Int
     {
         if(accessible) {
             // return memory value

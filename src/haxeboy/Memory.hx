@@ -1,18 +1,11 @@
 package haxeboy;
 
-// What could be doable with this? Easily swap parts by adding a register
-// function that would give the element its starting address.
-// Thus making the memory map for the GB would just be a factory easily
-// swappable for another for GBC or SGB.
-interface MemoryMappable {
-    public function getValue(address:Int):Int;
-    // public function registerAdress(starting_adress:Int):Void;
-}
-
 class Memory {
     /// Mockup of eventual API ///
 
-    // var rom:ROM;
+    var rom:ROM;
+    var current_rom_bank:Int;
+
     var vram:VRAM;
     // var eram:ERAM;
     var wram:WRAM;
@@ -20,14 +13,25 @@ class Memory {
     // var iop:IOP;
     var hram:HRAM;
 
+    public function new() {
+        rom = new ROM();
+        current_rom_bank = 0;
+
+        vram = new VRAM();
+
+        wram = new WRAM();
+
+        hram = new HRAM();
+    }
+
     public function getValue(address:Int) {
         // ROM bank 0, always present
         if(address >= 0x0000 && address <= 0x3FFFF) {
-            // return rom.bank[0].getValue(address);
+            return rom.getValueAtBank(0, address);            
         }
         // ROM bank 1-n, swappable
         else if(address >= 0x4000 && address <= 0x7FFF) {
-            // return rom.bank[current_bank_rom].getValue(address-0x4000);            
+            return rom.getValueAtBank(current_rom_bank, address-0x4000);            
         }
         // VRAM
         else if(address >= 0x8000 && address <= 0x9FFF) {
@@ -36,7 +40,8 @@ class Memory {
         // External RAM
         else if(address >= 0xA000 && address <= 0xBFFF) {
             // Beware, this part can be changed from the cart side.
-            // return external_ram.getValue(address - 0xA000);            
+            // return external_ram.getValue(address - 0xA000);
+            return 0xFF;
         }
         // Work RAM bank 0, always present
         else if(address >= 0xC000 && address <= 0xCFFF) {
@@ -53,14 +58,17 @@ class Memory {
         // Sprite Attribute Table (OAM)
         else if(address >= 0xFE00 && address <= 0xFE9F) {
             // return oam.getValue(address - 0xFE00);            
+            return 0xFF;
         }
         // Not accessible, should throw an exception, I think
         else if(address >= 0xFEA0 && address <= 0xFEFF) {
             // meh
+            return 0xFF;
         }
         // IO ports
         else if(address >= 0xFF00 && address <= 0xFF7F) {
             // return iop.getValue(address - 0xFF00);            
+            return 0xFF;
         }
         // HRAM (High RAM)
         else if(address >= 0xFF80 && address <= 0xFFFE) {
@@ -69,9 +77,11 @@ class Memory {
         // Interrupt enabler
         else if(address == 0xFFFF){
             // return interrupt_enabler;
+            return 0xFF;
         }        
         else {
             // throw MemoryAccesException('Out of Bounds');
+            return 0xFF;
         }
 
     }

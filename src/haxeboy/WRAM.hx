@@ -2,7 +2,7 @@ package haxeboy;
 
 import haxe.io.UInt8Array;
 
-class WRAM implements MemoryMappable {
+class WRAM implements MemoryMappable implements MemoryBankBased {
     var banks:Array<UInt8Array>;
 
     public function new()
@@ -11,10 +11,10 @@ class WRAM implements MemoryMappable {
     }
 
     public function getValue(address:Int) {
-        return banks[bank/1024].get(address%1024);
+        return banks[Std.int(address/1024)].get(address%1024);
     }
 
-    public function getValueAtBank(bank, address) {
+    public function getValueAtBank(bank:Int, address:Int) {
         return banks[bank].get(address);
     }
 }
