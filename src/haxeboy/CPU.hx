@@ -38,6 +38,7 @@ class CPU {
     public var PC:Int;
 
     // Halt status
+    private var halt_requested:Bool;
     public var halted:Bool;
 
     // cycles done
@@ -61,6 +62,7 @@ class CPU {
         cycles = 0;
         cyclesToBurn = 0;
         halted = false;
+        halt_requested = false;
     }
 
     /// Mockup of eventual API ///
@@ -70,12 +72,19 @@ class CPU {
         // TODO : stuff
         if(halted)
             return;
+
         var opcode:Int = memory.getValue(PC);
 
         if (cyclesToBurn > 0) {
             cyclesToBurn--;
             cycles++;
+            return;
         }
+        if(halt_requested) {
+            halted = true;
+            return;
+        }
+
         switch (opcode) {
             case 0x00:
                 // nop
@@ -93,14 +102,23 @@ class CPU {
                 cyclesToBurn = 8;
             case 0x03:
                 // inc BC
-                BC = BC + 1;
+                BC++;
                 PC += 1;
                 cyclesToBurn = 8;
+            case 0x04:
+                // inc B
+                var Bp = B;
+                B = (B + 1) % 256;
+                h = (Bp & 0x0F == 0x0F ? 1 : 0); // If we're going to have a carry from bit 3 to 4
+                z = (B == 0 ? 1 : 0);
+                n = 0;
 
+                PC += 1;
+                cyclesToBurn = 4;
             // ...
             case 0x76:
                 // halt
-                halted = true;
+                halt_requested = true;
                 PC += 1;
                 cyclesToBurn = 4;
         }
@@ -110,7 +128,6 @@ class CPU {
     }
 
     /// Register getters ///
-cycles
     public function get_AF():Int {
         return ((A & 0xFF) << 8) | (F & 0xFF);
     }

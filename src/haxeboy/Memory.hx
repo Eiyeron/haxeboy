@@ -1,7 +1,5 @@
 package haxeboy;
 
-import haxeboy.Tools.*;
-
 using haxeboy.Tools;
 
 class Memory {
