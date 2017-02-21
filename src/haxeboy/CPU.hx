@@ -88,25 +88,30 @@ class CPU {
         switch (opcode) {
             case 0x00:
                 // nop
+                // Z- n- H- C-
                 PC += 1;
                 cyclesToBurn = 4;
             case 0x01:
                 // ld BC,nn
+                // Z- n- H- C-
                 BC = memory.getValue16(PC+1);
                 PC += 3;
                 cyclesToBurn = 12;
             case 0x02:
                 // Ld (BC),a
+                // Z- n- H- C-
                 memory.setValue(BC, A);
                 PC += 1;
                 cyclesToBurn = 8;
             case 0x03:
                 // inc BC
+                // Z- n- H- C-
                 BC++;
                 PC += 1;
                 cyclesToBurn = 8;
             case 0x04:
                 // inc B
+                // Zs n0 Hs C-
                 var Bp = B;
                 B = (B + 1) % 256;
                 h = (Bp & 0x0F == 0x0F ? 1 : 0); // If we're going to have a carry from bit 3 to 4
