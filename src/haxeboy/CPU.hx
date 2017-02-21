@@ -45,8 +45,20 @@ class CPU {
 
     public function new()
     {
-        cycles = 0;
+        reset();
         // TODO: start values.
+    }
+
+    public function reset() {
+        A = 0;
+        F = 0;
+        BC = 0;
+        DE = 0;
+        HL = 0;
+        SP = 0;
+        PC = 0;
+        cycles = 0;
+        halted = false;
     }
 
     /// Mockup of eventual API ///
@@ -75,7 +87,7 @@ class CPU {
                 cycles += 8;
             case 0x03:
                 // inc BC
-                BC += 1;
+                BC = BC + 1;
                 PC += 1;
                 cycles += 8;
 
@@ -131,6 +143,7 @@ class CPU {
     }
 
     public function set_BC(value:Int):Int {
+
         B = (value >> 8) & 0xFF;
         C = value & 0xFF;
         return value & 0xFFFF;
