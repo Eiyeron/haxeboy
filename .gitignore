@@ -3,5 +3,7 @@
 *.sublime-project
 *.sublime-workspace
 
+build
+
 # SWAP Files
 *.swp
