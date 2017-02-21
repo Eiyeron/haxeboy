@@ -1,3 +1,7 @@
+
 *.n
 *.sublime-project
 *.sublime-workspace
+
+# SWAP Files
+*.swp
