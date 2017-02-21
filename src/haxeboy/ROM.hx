@@ -19,7 +19,6 @@ class ROM implements MemoryMappable implements MemoryBankBased {
 
 	public function loadCart(data:Bytes) {
 		real_number_of_rom_banks = Math.ceil(data.length / ROM_BANK_SIZE);
-
 		for(i in 0...real_number_of_rom_banks) {
 			var bank:UInt8Array = UInt8Array.fromBytes(data.sub(i * ROM_BANK_SIZE, ROM_BANK_SIZE));
 			banks.push(bank);
