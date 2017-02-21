@@ -12,6 +12,6 @@ class OAM implements MemoryMappable {
 
     public function getValue(address:Int):Int {
     	var num_sprite:Int = Math.floor(address/40);
-        return sprites[num_sprite].getValue(address - num_sprite);
+        return sprites[num_sprite].getValue(address - num_sprite * 40);
     }
 }
