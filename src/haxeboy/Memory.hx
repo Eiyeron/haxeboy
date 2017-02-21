@@ -3,15 +3,15 @@ package haxeboy;
 class Memory {
     /// Mockup of eventual API ///
 
-    var rom:ROM;
-    var current_rom_bank:Int;
+    public var rom(default, null):ROM;
+    public var current_rom_bank(default, null):Int;
 
-    var vram:VRAM;
+    public var vram(default, null):VRAM;
     // var eram:ERAM;
-    var wram:WRAM;
+    public var wram(default, null):WRAM;
     // var oam:ORAM;
     // var iop:IOP;
-    var hram:HRAM;
+    public var hram(default, null):HRAM;
 
     public function new() {
         rom = new ROM();

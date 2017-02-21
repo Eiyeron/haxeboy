@@ -4,41 +4,41 @@ class CPU {
     /// Registers ///
 
     // Accumulator and flags
-    var A:Int;
-    var F:Int;
-    var AF(get, set):Int;
+    public var A:Int;
+    public var F:Int;
+    public var AF(get, set):Int;
     // Flags stored in F
     // - Zero flag
-    var z(get ,set):Int;
+    public var z(get ,set):Int;
     // - Add/Sub-Flag (BCD)
-    var n(get ,set):Int;
+    public var n(get ,set):Int;
     // - Half Carry Flag (BCD)
-    var h(get ,set):Int;
+    public var h(get ,set):Int;
     // - Carry Flag (BCD)
-    var Cy(get ,set):Int;
+    public var Cy(get ,set):Int;
 
 
     // General registers
-    var B:Int;
-    var C:Int;
-    var BC(get, set):Int;
+    public var B:Int;
+    public var C:Int;
+    public var BC(get, set):Int;
 
-    var D:Int;
-    var E:Int;
-    var DE(get, set):Int;
+    public var D:Int;
+    public var E:Int;
+    public var DE(get, set):Int;
 
-    var H:Int;
-    var L:Int;
-    var HL(get, set):Int;
+    public var H:Int;
+    public var L:Int;
+    public var HL(get, set):Int;
 
     // Stack Pointer
-    var SP:Int;
+    public var SP:Int;
 
     // Program Counter
-    var PC:Int;
+    public var PC:Int;
 
     // Halt status
-    var halted:Bool;
+    public var halted:Bool;
 
     public function new()
     {
