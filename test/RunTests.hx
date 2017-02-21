@@ -25,6 +25,7 @@ class RunTests extends haxe.unit.TestCase {
 
 		assertEquals(gb.cpu.BC, 0xDEAD);
 		assertEquals(gb.cpu.cycles, 16); // 12 for LD, 4 for HALT
+		assertEquals(gb.cpu.PC, 0x0004); // 3 + LD, 1 for HALT
 	}
 
   	public static function main() {
