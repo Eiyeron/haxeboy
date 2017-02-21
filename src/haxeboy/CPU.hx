@@ -42,6 +42,7 @@ class CPU {
 
     // cycles done
     public var cycles:Int;
+    var cyclesToBurn:Int;
 
     public function new()
     {
@@ -58,6 +59,7 @@ class CPU {
         SP = 0;
         PC = 0;
         cycles = 0;
+        cyclesToBurn = 0;
         halted = false;
     }
 
@@ -70,38 +72,45 @@ class CPU {
             return;
         var opcode:Int = memory.getValue(PC);
 
+        if (cyclesToBurn > 0) {
+            cyclesToBurn--;
+            cycles++;
+        }
         switch (opcode) {
             case 0x00:
                 // nop
                 PC += 1;
-                cycles += 4;
+                cyclesToBurn = 4;
             case 0x01:
                 // ld BC,nn
                 BC = memory.getValue16(PC+1);
                 PC += 3;
-                cycles += 12;
+                cyclesToBurn = 12;
             case 0x02:
                 // Ld (BC),a
                 memory.setValue(BC, A);
                 PC += 1;
-                cycles += 8;
+                cyclesToBurn = 8;
             case 0x03:
                 // inc BC
                 BC = BC + 1;
                 PC += 1;
-                cycles += 8;
+                cyclesToBurn = 8;
 
             // ...
             case 0x76:
                 // halt
                 halted = true;
                 PC += 1;
-                cycles += 4;
+                cyclesToBurn = 4;
         }
+
+        cyclesToBurn--;
+        cycles++;
     }
 
     /// Register getters ///
-
+cycles
     public function get_AF():Int {
         return ((A & 0xFF) << 8) | (F & 0xFF);
     }
