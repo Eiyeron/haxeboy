@@ -192,6 +192,15 @@ class CPU {
         }
     }
 
+    // If a+b triggers the half-carry on the lower nibble, then return 1 else 0
+    private function get_half_carry_from_addition(a:Int, b:Int): Int {
+        return ((((a & 0x0F) + (b & 0x0F)) & 0x10) == 0x10) ? 1 : 0;
+    }
+    // If a substraction put a value's lower nibble going higher than before,
+    // a half carry must be raised.
+    private function get_half_carry_after_substraction(before:Int, after:Int): Int {
+        return ((before & 0x0F) < (after & 0x0F)) ? 1 : 0;
+    }
     /// Opcodes ///
 
     /**
@@ -237,7 +246,7 @@ class CPU {
                 z = (B == 0 ? 1 : 0);
                 n = 0;
                 // If the lower nibble overdflowed, so raise the half-carry.
-                h = ((Bp & 0x0F) > (B & 0x0F)) ? 1 : 0;
+                h = get_half_carry_from_addition(Bp, 1);
 
                 PC += 1;
                 cyclesToBurn = 4;
@@ -249,7 +258,7 @@ class CPU {
                 if(B < 0)
                     B += 256;
                 // If the lower nibble underflowed, so raise the half-carry.
-                h = ((Bp & 0x0F) < (B & 0x0F)) ? 1 : 0;
+                h = get_half_carry_after_substraction(Bp, B);
                 n = 1;
                 z = (B == 0xFF ? 1 : 0);
 
@@ -264,6 +273,7 @@ class CPU {
                 cyclesToBurn += 8;
             case 0x07:
                 // rlca
+                // Z0 n0 H0 Cs
                 var Ap = A;
                 A >>= 1;
                 h = 0;
@@ -273,7 +283,26 @@ class CPU {
 
                 PC += 1;
                 cyclesToBurn += 4;
+            case 0x08:
+                // ld SP,nn
+                // Z- n- H- C-
+                SP = memory.getValue16(PC+1);
+                PC += 3;
+                cyclesToBurn = 20;
             // ...
+            case 0x09:
+                // add HL, BC (Hl += BC)
+                // Z- n0 Hs Cs
+                var HLp = HL;
+                HL = (HL + BC) & 0xFFFF;
+                n = 0;
+                // If the high byte's lower nibble underflowed, so raise the half-carry.
+                h = get_half_carry_from_addition(HLp>>8, B);
+                // If overflow happened.
+                Cy = (HLp > HL) ? 1 : 0;
+
+                PC += 1;
+                cyclesToBurn = 8;
             case 0x76:
                 // halt
                 halt_requested = true;

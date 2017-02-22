@@ -66,4 +66,17 @@ class LDTest extends OpcodeTest {
         assertEquals(12, gb.cpu.cycles); // 8 for LD B,d8, 4 for HALT
         assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 1 for HALT
     }
+
+    function test_LD_SP_nn() {
+        var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
+        routine.writeByteBuffer([0x08, 0xDE, 0xAD, HALT]);
+        gb.insertCart(routine);
+
+        gb.run();
+
+        // Registers and timing check
+        assertEquals(0xDEAD, gb.cpu.SP);
+        assertEquals(24, gb.cpu.cycles); // 20 for LD Sp,nn, 4 for HALT
+        assertEquals(0x0004, gb.cpu.PC); // 3 + LD BC,nn, 1 for HALT
+    }
 }
