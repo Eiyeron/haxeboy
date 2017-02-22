@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 
+=======
+# Build results
+>>>>>>> master
 *.n
+build
+
+# IDE or text editor stuff
+*.vscode
 *.sublime-project
 *.sublime-workspace
-
-# SWAP Files
 *.swp

@@ -3,39 +3,40 @@ package haxeboy;
 import haxe.io.Bytes;
 
 class Gameboy {
-	var cpu:CPU;
-	var memory:Memory;
+    public var cpu(default, null):CPU;
+    public var memory(default, null):Memory;
 
-	public var turned_on(default, null):Bool;
+    public var turned_on(default, null):Bool;
 
-	public function new()
-	{
-	    cpu = new CPU();
-	    memory = new Memory();
-	    turned_on = false;
-	}
+    public function new()
+    {
+        cpu = new CPU();
+        memory = new Memory();
+        cpu.memory = memory;
+        turned_on = false;
+    }
 
     /// Mockup of eventual API ///
-	// TODO : like, everything? I haven't thought of a final API.
+    // TODO : like, everything? I haven't thought of a final API.
 
-	public function run() {
-		turned_on = true;
-		
-		while(turned_on) {
-			cpu.step();
-		}
-	}
+    public function run() {
+        turned_on = true;
 
-	public function reset() {
-		// cpu.reset();
-		// memory.reset();
-	}
+        while(turned_on && !cpu.stopped) {
+            cpu.step();
+        }
+    }
 
-	public function insertCart(cartData:Bytes) {
-		memory.rom.loadCart(cartData);
-	}
+    public function reset() {
+        // cpu.reset();
+        // memory.reset();
+    }
 
-	public function removeCart() {
-		memory.rom.removeCart();
-	}
+    public function insertCart(cartData:Bytes) {
+        memory.rom.loadCart(cartData);
+    }
+
+    public function removeCart() {
+        memory.rom.removeCart();
+    }
 }

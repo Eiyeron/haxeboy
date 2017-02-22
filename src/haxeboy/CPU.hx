@@ -37,16 +37,35 @@ class CPU {
     // Program Counter
     public var PC:Int;
 
+    // Stop status
+    private var stop_requested:Bool;
+    public var stopped:Bool;
     // Halt status
+    private var halt_requested:Bool;
     public var halted:Bool;
 
     // cycles done
     public var cycles:Int;
+    var cyclesToBurn:Int;
 
     public function new()
     {
-        cycles = 0;
+        reset();
         // TODO: start values.
+    }
+
+    public function reset() {
+        A = 0;
+        F = 0;
+        BC = 0;
+        DE = 0;
+        HL = 0;
+        SP = 0;
+        PC = 0;
+        cycles = 0;
+        cyclesToBurn = 0;
+        halted = false;
+        halt_requested = false;
     }
 
     /// Mockup of eventual API ///
@@ -58,30 +77,29 @@ class CPU {
             return;
 
         var opcode:Int = memory.getValue(PC);
-        switch (opcode) {
-            case 0x00:
-                // nop
-                PC += 1;
-                cycles += 4;
-            case 0x01:
-                // ld BC,nn
-                BC = memory.getValue16(PC+1);
-                PC += 2;
-                cycles += 12;
-            case 0x02:
-                // Ld (BC),a
-                memory.setValue(BC, A);
-                PC += 1;
-                cycles += 8;
-            case 0x03:
-                // inc BC
-                BC += 1;
-                PC += 1;
-                cycles += 8;
+
+        if (cyclesToBurn > 0) {
+            cyclesToBurn--;
+            cycles++;
+            return;
         }
+        if(halt_requested) {
+            halted = true;
+            return;
+        }
+        if(stop_requested) {
+            stopped = true;
+            return;
+        }
+
+        processOpcode(opcode);
+
+        cyclesToBurn--;
+        cycles++;
     }
 
     /// Register getters ///
+<<<<<<< HEAD
     /*
        all register-getters should be inlined, as they will be invoked very frequently,
        and that many extra funtion calls will bog down the JS interpreter
@@ -101,6 +119,22 @@ class CPU {
 
     public inline function get_HL():Int {   
         return ((H << 8) & 0xFF) | (L & 0xFF);
+=======
+    public function get_AF():Int {
+        return (A << 8) | F;
+    }
+
+    public function get_BC():Int {
+        return (B << 8) | C;
+    }
+
+    public function get_DE():Int {
+        return (D << 8) | E;
+    }
+
+    public function get_HL():Int {
+        return (H << 8) | L;
+>>>>>>> master
     }
 
     public inline function get_z():Int {
@@ -128,6 +162,7 @@ class CPU {
     }
 
     public function set_BC(value:Int):Int {
+
         B = (value >> 8) & 0xFF;
         C = value & 0xFF;
         return value & 0xFFFF;
@@ -150,7 +185,6 @@ class CPU {
             F &= ~(1 << 7);
             return 0;
         } else {
-
             F |= (1 << 7);
             return 1;
         }
@@ -185,4 +219,196 @@ class CPU {
             return 1;
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    // If a+b triggers the half-carry on the lower nibble, then return 1 else 0
+    private function get_half_carry_from_addition(a:Int, b:Int): Int {
+        return ((((a & 0x0F) + (b & 0x0F)) & 0x10) == 0x10) ? 1 : 0;
+    }
+    // If a substraction put a value's lower nibble going higher than before,
+    // a half carry must be raised.
+    private function get_half_carry_after_substraction(before:Int, after:Int): Int {
+        return ((before & 0x0F) < (after & 0x0F)) ? 1 : 0;
+    }
+    /// Opcodes ///
+
+    /**
+     *  The big, ugly, awsful function that makes people flee by its complexity.
+     *  Note: for each opcode there should be a flag alteration indicator that
+     *  should look like this:
+     *  // Zx nx Hx Cx
+     *  x must be one of those values:
+     *  - 0 or 1 is the flag is set to 1 or 0
+     *  - s if the flag is set according the opcode's logic
+     *  - - if the flag is let as is it.
+     */
+    function processOpcode(opcode:Int) {
+        switch (opcode) {
+            case 0x00:
+                // nop
+                // Z- n- H- C-
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x01:
+                // ld BC,nn
+                // Z- n- H- C-
+                BC = memory.getValue16(PC+1);
+
+                PC += 3;
+                cyclesToBurn = 12;
+            case 0x02:
+                // ld (BC),a
+                // Z- n- H- C-
+                memory.setValue(BC, A);
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x03:
+                // inc BC
+                // Z- n- H- C-
+                BC++;
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x04:
+                // inc B
+                // Zs n0 Hs C-
+                var Bp = B;
+                B = (B + 1) % 256;
+                z = (B == 0 ? 1 : 0);
+                n = 0;
+                // If the lower nibble overdflowed, so raise the half-carry.
+                h = get_half_carry_from_addition(Bp, 1);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x05:
+                // dec B
+                // Zs n1 Hs C-
+                var Bp = B;
+                B = (B - 1) % 256;
+                if(B < 0)
+                    B += 256;
+                // If the lower nibble underflowed, so raise the half-carry.
+                h = get_half_carry_after_substraction(Bp, B);
+                n = 1;
+                z = (B == 0xFF ? 1 : 0);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x06:
+                // ld b, d8
+                // Z- n- H- C-
+                B = memory.getValue(PC + 1);
+
+                PC += 2;
+                cyclesToBurn += 8;
+            case 0x07:
+                // rlca
+                // Z0 n0 H0 Cs
+                var Ap = A;
+                A = (A << 1) & 0xFF;
+                h = 0;
+                n = 0;
+                z = 0;
+                Cy = (Ap & 0x80 == 0x80 ) ? 1 : 0;
+
+                PC += 1;
+                cyclesToBurn += 4;
+            case 0x08:
+                // ld SP,nn
+                // Z- n- H- C-
+                SP = memory.getValue16(PC+1);
+                PC += 3;
+                cyclesToBurn = 20;
+            case 0x09:
+                // add HL, BC (Hl += BC)
+                // Z- n0 Hs Cs
+                var HLp = HL;
+                HL = (HL + BC) & 0xFFFF;
+                n = 0;
+                // If the high byte's lower nibble underflowed, so raise the half-carry.
+                h = get_half_carry_from_addition(HLp>>8, B);
+                // If overflow happened.
+                Cy = (HLp > HL) ? 1 : 0;
+
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x0A:
+                // ld A,(BC)
+                // Z- n- H- C-
+                A = memory.getValue(BC);
+
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x0B:
+                // dec BC
+                // Z- n- H- C-
+                BC = (BC - 1) % 0x10000;
+                if (BC < 0)
+                    BC += 0x10000;
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x0C:
+                // inc C
+                // Zs n0 Hs C-
+                var Cp = C;
+                C = (C + 1) % 256;
+                z = (C == 0 ? 1 : 0);
+                n = 0;
+                // If the lower nibble overdflowed, so raise the half-carry.
+                h = get_half_carry_from_addition(Cp, 1);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x0D:
+                // dec C
+                // Zs n1 Hs C-
+                var Cp = C;
+                C = (C - 1) % 256;
+                if(C < 0)
+                    C += 256;
+                // If the lower nibble underflowed, so raise the half-carry.
+                h = get_half_carry_after_substraction(Cp, C);
+                n = 1;
+                z = (C == 0xFF ? 1 : 0);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x0E:
+                // ld c, d8
+                // Z- n- H- C-
+                C = memory.getValue(PC + 1);
+
+                PC += 2;
+                cyclesToBurn += 8;
+
+            case 0x0F:
+                // RRCA
+                // Z0 n0 H0 Cs
+                var Ap = A;
+                A >>= 1;
+                z = 0;
+                n = 0;
+                h = 0;
+                Cy = (Ap & 0x01) == 0x01 ? 1 : 0;
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x10:
+                // stop (supposed to jump next instruction)
+                //
+                stop_requested = true;
+                PC += 2;
+                cyclesToBurn = 4;
+
+            // ...
+            case 0x76:
+                // halt
+                halt_requested = true;
+                PC += 1;
+                cyclesToBurn = 4;
+        }
+    }
+}
+>>>>>>> master
