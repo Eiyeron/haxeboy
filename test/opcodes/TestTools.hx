@@ -4,7 +4,7 @@ import haxe.io.Bytes;
 
 @:enum
 abstract OPS(Int) from Int to Int {
-    var HALT = 0x76;
+    var STOP = 0x10;
 }
 
 class TestTools {

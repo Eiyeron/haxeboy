@@ -6,6 +6,7 @@ class RunTests extends haxe.unit.TestCase {
 
       public static function main() {
         var r = new haxe.unit.TestRunner();
+        r.add(new MiscOpcodesTest());
         r.add(new LDTest());
         r.add(new INCTest());
         r.add(new DECTest());

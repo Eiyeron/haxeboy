@@ -22,7 +22,7 @@ class Gameboy {
     public function run() {
         turned_on = true;
 
-        while(turned_on && !cpu.halted) {
+        while(turned_on && !cpu.stopped) {
             cpu.step();
         }
     }

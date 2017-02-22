@@ -37,6 +37,9 @@ class CPU {
     // Program Counter
     public var PC:Int;
 
+    // Stop status
+    private var stop_requested:Bool;
+    public var stopped:Bool;
     // Halt status
     private var halt_requested:Bool;
     public var halted:Bool;
@@ -82,6 +85,10 @@ class CPU {
         }
         if(halt_requested) {
             halted = true;
+            return;
+        }
+        if(stop_requested) {
+            stopped = true;
             return;
         }
 
@@ -364,6 +371,13 @@ class CPU {
 
                 PC += 1;
                 cyclesToBurn = 4;
+            case 0x10:
+                // stop (supposed to jump next instruction)
+                //
+                stop_requested = true;
+                PC += 2;
+                cyclesToBurn = 4;
+
             // ...
             case 0x76:
                 // halt
