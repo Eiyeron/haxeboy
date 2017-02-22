@@ -194,6 +194,15 @@ class CPU {
 
     /// Opcodes ///
 
+    /**
+     *  Note: for each opcode there should be a flag alteration indicator that
+     *  should look like this:
+     *  // Zx nx Hx Cx
+     *  x must be one of those values:
+     *  - 0 or 1 is the flag is set to 1 or 0
+     *  - s if the flag is set according the opcode's logic
+     *  - - if the flag is let as is it.
+     */
     function processOpcode(opcode:Int) {
         switch (opcode) {
             case 0x00:
