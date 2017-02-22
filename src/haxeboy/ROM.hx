@@ -47,7 +47,7 @@ class ROM implements MemoryMappable implements MemoryBankBased {
             return 0;
         } 
 
-        // As saifd earlier, the console can only access two ROM banks at once:
+        // As said earlier, the console can only access two ROM banks at once:
         // Bank 0 which is always accessible
         // Bank 1-n which is accessible by inquiring the cart to switch
         // banks.

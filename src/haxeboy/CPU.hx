@@ -85,63 +85,7 @@ class CPU {
             return;
         }
 
-        switch (opcode) {
-            case 0x00:
-                // nop
-                // Z- n- H- C-
-                PC += 1;
-                cyclesToBurn = 4;
-            case 0x01:
-                // ld BC,nn
-                // Z- n- H- C-
-                BC = memory.getValue16(PC+1);
-                PC += 3;
-                cyclesToBurn = 12;
-            case 0x02:
-                // Ld (BC),a
-                // Z- n- H- C-
-                memory.setValue(BC, A);
-                PC += 1;
-                cyclesToBurn = 8;
-            case 0x03:
-                // inc BC
-                // Z- n- H- C-
-                BC++;
-                PC += 1;
-                cyclesToBurn = 8;
-            case 0x04:
-                // inc B
-                // Zs n0 Hs C-
-                var Bp = B;
-                B = (B + 1) % 256;
-                z = (B == 0 ? 1 : 0);
-                n = 0;
-                // If the lower nibble overdflowed, so raise the half-carry.
-                h = ((Bp & 0x0F) > (B & 0x0F)) ? 1 : 0;
-
-                PC += 1;
-                cyclesToBurn = 4;
-            case 0x05:
-                // dev B
-                // Zs n1 Hs C-
-                var Bp = B;
-                B = (B - 1) % 256;
-                if(B < 0)
-                    B += 256;
-                // If the lower nibble underflowed, so raise the half-carry.
-                h = ((Bp & 0x0F) < (B & 0x0F)) ? 1 : 0;
-                n = 1;
-                z = (B == 0xFF ? 1 : 0);
-
-                PC += 1;
-                cyclesToBurn = 4;
-            // ...
-            case 0x76:
-                // halt
-                halt_requested = true;
-                PC += 1;
-                cyclesToBurn = 4;
-        }
+        processOpcode(opcode);
 
         cyclesToBurn--;
         cycles++;
@@ -149,19 +93,19 @@ class CPU {
 
     /// Register getters ///
     public function get_AF():Int {
-        return ((A & 0xFF) << 8) | (F & 0xFF);
+        return (A << 8) | F;
     }
 
     public function get_BC():Int {
-        return ((B & 0xFF) << 8) | (C & 0xFF);
+        return (B << 8) | C;
     }
 
     public function get_DE():Int {
-        return ((D & 0xFF) << 8) | (E & 0xFF);
+        return (D << 8) | E;
     }
 
     public function get_HL():Int {
-        return ((H & 0xFF) << 8) | (L & 0xFF);
+        return (H << 8) | L;
     }
 
     public function get_z():Int {
@@ -245,6 +189,68 @@ class CPU {
         } else {
             F |= (1 << 4);
             return 1;
+        }
+    }
+
+    /// Opcodes ///
+
+    function processOpcode(opcode:Int) {
+        switch (opcode) {
+            case 0x00:
+                // nop
+                // Z- n- H- C-
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x01:
+                // ld BC,nn
+                // Z- n- H- C-
+                BC = memory.getValue16(PC+1);
+                PC += 3;
+                cyclesToBurn = 12;
+            case 0x02:
+                // Ld (BC),a
+                // Z- n- H- C-
+                memory.setValue(BC, A);
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x03:
+                // inc BC
+                // Z- n- H- C-
+                BC++;
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x04:
+                // inc B
+                // Zs n0 Hs C-
+                var Bp = B;
+                B = (B + 1) % 256;
+                z = (B == 0 ? 1 : 0);
+                n = 0;
+                // If the lower nibble overdflowed, so raise the half-carry.
+                h = ((Bp & 0x0F) > (B & 0x0F)) ? 1 : 0;
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x05:
+                // dev B
+                // Zs n1 Hs C-
+                var Bp = B;
+                B = (B - 1) % 256;
+                if(B < 0)
+                    B += 256;
+                // If the lower nibble underflowed, so raise the half-carry.
+                h = ((Bp & 0x0F) < (B & 0x0F)) ? 1 : 0;
+                n = 1;
+                z = (B == 0xFF ? 1 : 0);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            // ...
+            case 0x76:
+                // halt
+                halt_requested = true;
+                PC += 1;
+                cyclesToBurn = 4;
         }
     }
 }
