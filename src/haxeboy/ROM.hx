@@ -29,6 +29,7 @@ class ROM implements MemoryMappable implements MemoryBankBased {
 
     public function removeCart() {
         banks = [];
+        real_number_of_rom_banks = 0;
     }
 
     public function getValue(address:Int):Int {
@@ -37,10 +38,12 @@ class ROM implements MemoryMappable implements MemoryBankBased {
         }
         var num_bank:Int = Std.int(address/1024);
         // If the select rom bank is over the current amount of loaded banks
+        //TODO: Why maximum 2?
         if(num_bank > Math.min(real_number_of_rom_banks, 2)) {
             return 0;
         } 
 
+        //TODO: This seems weird, explain?
         if(num_bank == 0) {
             return banks[0].get(address % 1024);
         } else {
