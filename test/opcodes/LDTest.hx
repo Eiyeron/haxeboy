@@ -28,7 +28,7 @@ class LDTest extends haxe.unit.TestCase {
         assertEquals(0x0004, gb.cpu.PC); // 3 + LD BC,nn, 1 for HALT
     }
 
-    function test_LD_BC_a_normal() {
+    function test_LD_BC_A_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.set(0x0000, 0x02); // LD (BC), A
         routine.set(0x0001, 0x76); // HALT
@@ -47,7 +47,7 @@ class LDTest extends haxe.unit.TestCase {
     }
 
     // Should fail by tryng to write in ROM
-    function test_LD_BC_a_fail() {
+    function test_LD_BC_A_fail() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.set(0x0000, 0x02); // LD (BC), A
         routine.set(0x0001, 0x76); // HALT
@@ -65,4 +65,19 @@ class LDTest extends haxe.unit.TestCase {
         assertEquals(0x0002, gb.cpu.PC); // 1 + LD (BC),A, 1 for HALT
     }
 
+    function test_LD_B_d8() {
+        var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
+        routine.set(0x0000, 0x06); // LD B, 0x42
+        routine.set(0x0001, 0x42);
+        //
+        routine.set(0x0002, 0x76); // HALT
+        gb.insertCart(routine);
+
+        gb.run();
+
+        // Registers and timing check
+        assertEquals(0x42, gb.cpu.B);
+        assertEquals(12, gb.cpu.cycles); // 8 for LD B,d8, 4 for HALT
+        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 1 for HALT
+    }
 }

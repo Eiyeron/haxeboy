@@ -1,9 +1,5 @@
 package;
 
-import haxeboy.Gameboy;
-import haxeboy.ROM;
-import haxe.io.Bytes;
-
 import opcodes.*;
 
 class RunTests extends haxe.unit.TestCase {

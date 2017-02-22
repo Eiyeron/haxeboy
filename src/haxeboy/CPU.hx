@@ -195,6 +195,7 @@ class CPU {
     /// Opcodes ///
 
     /**
+     *  The big, ugly, awsful function that makes people flee by its complexity.
      *  Note: for each opcode there should be a flag alteration indicator that
      *  should look like this:
      *  // Zx nx Hx Cx
@@ -217,7 +218,7 @@ class CPU {
                 PC += 3;
                 cyclesToBurn = 12;
             case 0x02:
-                // Ld (BC),a
+                // ld (BC),a
                 // Z- n- H- C-
                 memory.setValue(BC, A);
                 PC += 1;
@@ -241,7 +242,7 @@ class CPU {
                 PC += 1;
                 cyclesToBurn = 4;
             case 0x05:
-                // dev B
+                // dec B
                 // Zs n1 Hs C-
                 var Bp = B;
                 B = (B - 1) % 256;
@@ -254,6 +255,13 @@ class CPU {
 
                 PC += 1;
                 cyclesToBurn = 4;
+            case 0x06:
+                // ld b, d8
+                // Z- n- H- C-
+                B = memory.getValue(PC + 1);
+
+                PC += 2;
+                cyclesToBurn += 8;
             // ...
             case 0x76:
                 // halt
