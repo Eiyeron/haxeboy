@@ -4,7 +4,11 @@ import haxeboy.Gameboy;
 import haxeboy.ROM;
 import haxe.io.Bytes;
 
+using opcodes.TestTools;
+
 class INCTest extends haxe.unit.TestCase {
+    public static inline var HALT:Int = 0x76;
+
     var gb:Gameboy;
 
     override public function setup() {
@@ -13,8 +17,7 @@ class INCTest extends haxe.unit.TestCase {
 
     function test_INC_BC() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x03); // INC BC
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x03, HALT]);
         gb.insertCart(routine);
 
         gb.run();
@@ -27,8 +30,7 @@ class INCTest extends haxe.unit.TestCase {
 
     function test_INC_B_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x04); // INC B
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x04, HALT]);
         gb.insertCart(routine);
 
         gb.run();
@@ -45,8 +47,7 @@ class INCTest extends haxe.unit.TestCase {
 
     function test_INC_B_overflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x04); // INC B
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x04, HALT]);
         gb.insertCart(routine);
 
         gb.cpu.B =0xFF;
@@ -65,8 +66,7 @@ class INCTest extends haxe.unit.TestCase {
 
     function test_INC_B_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x04); // INC B
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x04, HALT]);
         gb.insertCart(routine);
 
         gb.cpu.B = 0x0F;

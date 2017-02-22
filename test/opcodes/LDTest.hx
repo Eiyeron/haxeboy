@@ -4,20 +4,21 @@ import haxeboy.Gameboy;
 import haxeboy.ROM;
 import haxe.io.Bytes;
 
+using opcodes.TestTools;
+
 class LDTest extends haxe.unit.TestCase {
+    public static inline var HALT:Int = 0x76;
+
     var gb:Gameboy;
 
     override public function setup() {
         gb = new Gameboy();
     }
 
+
     function test_LD_BC_nn() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x01); // LD BC, 0xDEAD
-        routine.set(0x0001, 0xDE);
-        routine.set(0x0002, 0xAD);
-        //
-        routine.set(0x0003, 0x76); // HALT
+        routine.writeByteBuffer([0x01, 0xDE, 0xAD, HALT]);
         gb.insertCart(routine);
 
         gb.run();
@@ -30,8 +31,7 @@ class LDTest extends haxe.unit.TestCase {
 
     function test_LD_BC_A_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x02); // LD (BC), A
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x02, HALT]);
         gb.insertCart(routine);
 
         gb.cpu.BC = 0xC000;
@@ -49,8 +49,7 @@ class LDTest extends haxe.unit.TestCase {
     // Should fail by tryng to write in ROM
     function test_LD_BC_A_fail() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x02); // LD (BC), A
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x02, HALT]);
         gb.insertCart(routine);
 
         gb.cpu.BC = 0x0000;
@@ -67,10 +66,7 @@ class LDTest extends haxe.unit.TestCase {
 
     function test_LD_B_d8() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x06); // LD B, 0x42
-        routine.set(0x0001, 0x42);
-        //
-        routine.set(0x0002, 0x76); // HALT
+        routine.writeByteBuffer([0x06, 0x42, 0x76]);
         gb.insertCart(routine);
 
         gb.run();

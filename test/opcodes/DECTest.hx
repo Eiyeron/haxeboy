@@ -4,7 +4,10 @@ import haxeboy.Gameboy;
 import haxeboy.ROM;
 import haxe.io.Bytes;
 
+using opcodes.TestTools;
+
 class DECTest extends haxe.unit.TestCase {
+    public static inline var HALT:Int = 0x76;
     var gb:Gameboy;
 
     override public function setup() {
@@ -13,8 +16,7 @@ class DECTest extends haxe.unit.TestCase {
 
     function test_DEC_B_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x05); // DEC B
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x05, HALT]);
         gb.insertCart(routine);
 
         gb.cpu.B = 0x02;
@@ -32,8 +34,7 @@ class DECTest extends haxe.unit.TestCase {
 
     function test_DEC_B_underflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x05); // DEC B
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x05, HALT]);
         gb.insertCart(routine);
 
         gb.cpu.B = 0x00;
@@ -52,8 +53,7 @@ class DECTest extends haxe.unit.TestCase {
 
     function test_DEC_B_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
-        routine.set(0x0000, 0x05); // DEC B
-        routine.set(0x0001, 0x76); // HALT
+        routine.writeByteBuffer([0x05, HALT]);
         gb.insertCart(routine);
 
         gb.cpu.B = 0x10;
