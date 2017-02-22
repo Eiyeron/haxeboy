@@ -62,4 +62,73 @@ class DECTest extends OpcodeTest {
         assertEquals(1, gb.cpu.h); // Half carry should be set
     }
 
+    function test_DEC_BC_normal() {
+        var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
+        routine.writeByteBuffer([0x0B, HALT]);
+        gb.insertCart(routine);
+
+        gb.cpu.BC = 0x02;
+        gb.run();
+
+        // Registers and timing check
+        assertEquals(0x01, gb.cpu.BC);
+        assertEquals(12, gb.cpu.cycles); // 8 for DEC BC, 4 for HALT
+        assertEquals(0x0002, gb.cpu.PC); // 1 + DEC, 1 for HALT
+    }
+
+    function test_DEC_C_normal() {
+        var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
+        routine.writeByteBuffer([0x0D, HALT]);
+        gb.insertCart(routine);
+
+        gb.cpu.C = 0x02;
+        gb.run();
+
+        // Registers and timing check
+        assertEquals(0x01, gb.cpu.C);
+        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for HALT
+        assertEquals(0x0002, gb.cpu.PC); // 1 + DEC, 1 for HALT
+        // Flag check
+        assertEquals(0, gb.cpu.z); // It's not going to 0
+        assertEquals(1, gb.cpu.n); // Should be one
+        assertEquals(0, gb.cpu.h); // Not overflowing
+    }
+
+    function test_DEC_C_underflow() {
+        var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
+        routine.writeByteBuffer([0x0D, HALT]);
+        gb.insertCart(routine);
+
+        gb.cpu.C = 0x00;
+        gb.cpu.halted = false;
+        gb.run();
+
+        // Registers and timing check
+        assertEquals(0xFF, gb.cpu.C);
+        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for HALT
+        assertEquals(0x0002, gb.cpu.PC); // 1 + DEC, 1 for HALT
+        // Flag check
+        assertEquals(1, gb.cpu.z); // Underflowing
+        assertEquals(1, gb.cpu.n); // Should be one
+        assertEquals(1, gb.cpu.h); // Half carry should be set
+    }
+
+    function test_DEC_C_halfcarry() {
+        var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
+        routine.writeByteBuffer([0x0D, HALT]);
+        gb.insertCart(routine);
+
+        gb.cpu.C = 0x10;
+        gb.cpu.halted = false;
+        gb.run();
+
+        // Registers and timing check
+        assertEquals(0x0F, gb.cpu.C);
+        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for HALT
+        assertEquals(0x0002, gb.cpu.PC); // 1 + DEC, 1 for HALT
+        // Flag check
+        assertEquals(0, gb.cpu.z); // Should not going to zero
+        assertEquals(1, gb.cpu.n); // Should be one
+        assertEquals(1, gb.cpu.h); // Half carry should be set
+    }
 }

@@ -224,6 +224,7 @@ class CPU {
                 // ld BC,nn
                 // Z- n- H- C-
                 BC = memory.getValue16(PC+1);
+
                 PC += 3;
                 cyclesToBurn = 12;
             case 0x02:
@@ -275,11 +276,11 @@ class CPU {
                 // rlca
                 // Z0 n0 H0 Cs
                 var Ap = A;
-                A >>= 1;
+                A = (A << 1) & 0xFF;
                 h = 0;
                 n = 0;
                 z = 0;
-                Cy = (Ap & 0x01 == 1 ) ? 1 : 0;
+                Cy = (Ap & 0x80 == 0x80 ) ? 1 : 0;
 
                 PC += 1;
                 cyclesToBurn += 4;
@@ -289,7 +290,6 @@ class CPU {
                 SP = memory.getValue16(PC+1);
                 PC += 3;
                 cyclesToBurn = 20;
-            // ...
             case 0x09:
                 // add HL, BC (Hl += BC)
                 // Z- n0 Hs Cs
@@ -303,6 +303,68 @@ class CPU {
 
                 PC += 1;
                 cyclesToBurn = 8;
+            case 0x0A:
+                // ld A,(BC)
+                // Z- n- H- C-
+                A = memory.getValue(BC);
+
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x0B:
+                // dec BC
+                // Z- n- H- C-
+                BC = (BC - 1) % 0x10000;
+                if (BC < 0)
+                    BC += 0x10000;
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x0C:
+                // inc C
+                // Zs n0 Hs C-
+                var Cp = C;
+                C = (C + 1) % 256;
+                z = (C == 0 ? 1 : 0);
+                n = 0;
+                // If the lower nibble overdflowed, so raise the half-carry.
+                h = get_half_carry_from_addition(Cp, 1);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x0D:
+                // dec C
+                // Zs n1 Hs C-
+                var Cp = C;
+                C = (C - 1) % 256;
+                if(C < 0)
+                    C += 256;
+                // If the lower nibble underflowed, so raise the half-carry.
+                h = get_half_carry_after_substraction(Cp, C);
+                n = 1;
+                z = (C == 0xFF ? 1 : 0);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x0E:
+                // ld c, d8
+                // Z- n- H- C-
+                C = memory.getValue(PC + 1);
+
+                PC += 2;
+                cyclesToBurn += 8;
+
+            case 0x0F:
+                // RRCA
+                // Z0 n0 H0 Cs
+                var Ap = A;
+                A >>= 1;
+                z = 0;
+                n = 0;
+                h = 0;
+                Cy = (Ap & 0x01) == 0x01 ? 1 : 0;
+
+                PC += 1;
+                cyclesToBurn = 4;
+            // ...
             case 0x76:
                 // halt
                 halt_requested = true;
