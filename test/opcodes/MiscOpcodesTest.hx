@@ -13,6 +13,6 @@ class MiscOpcodesTest extends OpcodeTest {
         gb.run();
         // Registers and timing check
         assertEquals(4, gb.cpu.cycles); //  4 for STOP
-        assertEquals(0x0002, gb.cpu.PC); // 1 for RRCA, 1 for STOP
+        assertEquals(0x0002, gb.cpu.PC); // 1 for RRCA, 2 for STOP
     }
 }

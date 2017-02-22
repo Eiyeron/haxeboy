@@ -20,7 +20,7 @@ class ADDTest extends OpcodeTest {
         assertEquals(0xDEAD, gb.cpu.HL);
         assertEquals(0x00AD, gb.cpu.BC);
         assertEquals(12, gb.cpu.cycles); // 8 for LD, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 2 for STOP
         // Flags
         assertEquals(0x00, gb.cpu.n);
         assertEquals(0x00, gb.cpu.h);
@@ -41,7 +41,7 @@ class ADDTest extends OpcodeTest {
         assertEquals(0x1000, gb.cpu.HL);
         assertEquals(0x0100, gb.cpu.BC);
         assertEquals(12, gb.cpu.cycles); // 8 for LD, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 2 for STOP
         // Flags
         assertEquals(0x00, gb.cpu.n);
         assertEquals(0x01, gb.cpu.h);
@@ -62,7 +62,7 @@ class ADDTest extends OpcodeTest {
         assertEquals(0x0000, gb.cpu.HL);
         assertEquals(0x1000, gb.cpu.BC);
         assertEquals(12, gb.cpu.cycles); // 8 for LD, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 2 for STOP
         // Flags
         assertEquals(0x00, gb.cpu.n);
         assertEquals(0x00, gb.cpu.h);

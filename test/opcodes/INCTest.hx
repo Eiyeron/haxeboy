@@ -16,7 +16,7 @@ class INCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x0001, gb.cpu.BC);
         assertEquals(12, gb.cpu.cycles); // 8 for INC BC, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 2 for STOP
     }
 
     function test_INC_B_normal() {
@@ -29,7 +29,7 @@ class INCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x01, gb.cpu.B);
         assertEquals(8, gb.cpu.cycles); // 4 for INC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // It's not going to 0
         assertEquals(0, gb.cpu.n); // Should be zero
@@ -47,7 +47,7 @@ class INCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x00, gb.cpu.B);
         assertEquals(8, gb.cpu.cycles); // 4 for INC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 2 for STOP
         // Flag check
         assertEquals(1, gb.cpu.z); // Overflowing
         assertEquals(0, gb.cpu.n); // Should be zero
@@ -65,7 +65,7 @@ class INCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x10, gb.cpu.B);
         assertEquals(8, gb.cpu.cycles); // 4 for INC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // Overflowing
         assertEquals(0, gb.cpu.n); // Should be zero
@@ -82,7 +82,7 @@ class INCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x01, gb.cpu.C);
         assertEquals(8, gb.cpu.cycles); // 4 for INC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // It's not going to 0
         assertEquals(0, gb.cpu.n); // Should be zero
@@ -100,7 +100,7 @@ class INCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x00, gb.cpu.C);
         assertEquals(8, gb.cpu.cycles); // 4 for INC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 2 for STOP
         // Flag check
         assertEquals(1, gb.cpu.z); // Overflowing
         assertEquals(0, gb.cpu.n); // Should be zero
@@ -118,7 +118,7 @@ class INCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x10, gb.cpu.C);
         assertEquals(8, gb.cpu.cycles); // 4 for INC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + INC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // Overflowing
         assertEquals(0, gb.cpu.n); // Should be zero

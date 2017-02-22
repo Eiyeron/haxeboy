@@ -16,7 +16,7 @@ class LDTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0xDEAD, gb.cpu.BC);
         assertEquals(16, gb.cpu.cycles); // 12 for LD, 4 for STOP
-        assertEquals(0x0005, gb.cpu.PC); // 3 + LD BC,nn, 1 for STOP
+        assertEquals(0x0005, gb.cpu.PC); // 3 + LD BC,nn, 2 for STOP
     }
 
     function test_LD_BC_A_normal() {
@@ -33,7 +33,7 @@ class LDTest extends OpcodeTest {
         assertEquals(0xC000, gb.cpu.BC);
         assertEquals(0x42, gb.memory.getValue(0xC000));
         assertEquals(12, gb.cpu.cycles); // 8 for LD, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 2 for STOP
     }
 
     // Should fail by tryng to write in ROM
@@ -51,7 +51,7 @@ class LDTest extends OpcodeTest {
         assertEquals(0x0000, gb.cpu.BC);
         assertEquals(0x02, gb.memory.getValue(0x0000)); // Shouldn't have changed the ROM
         assertEquals(12, gb.cpu.cycles); // 8 for LD, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + LD (BC),A, 2 for STOP
     }
 
     function test_LD_B_d8() {
@@ -64,7 +64,7 @@ class LDTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x42, gb.cpu.B);
         assertEquals(12, gb.cpu.cycles); // 8 for LD B,d8, 4 for STOP
-        assertEquals(0x0004, gb.cpu.PC); // 1 + LD (BC),A, 1 for STOP
+        assertEquals(0x0004, gb.cpu.PC); // 1 + LD (BC),A, 2 for STOP
     }
 
     function test_LD_SP_nn() {
@@ -77,7 +77,7 @@ class LDTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0xDEAD, gb.cpu.SP);
         assertEquals(24, gb.cpu.cycles); // 20 for LD Sp,nn, 4 for STOP
-        assertEquals(0x0005, gb.cpu.PC); // 3 + LD BC,nn, 1 for STOP
+        assertEquals(0x0005, gb.cpu.PC); // 3 + LD BC,nn, 2 for STOP
     }
 
     function test_LD_A_BC() {
@@ -93,7 +93,7 @@ class LDTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x42, gb.cpu.A);
         assertEquals(12, gb.cpu.cycles); // 8 for LD, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 3 + LD BC,nn, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 3 + LD BC,nn, 2 for STOP
     }
 
     function test_LD_C_d8() {
@@ -106,6 +106,6 @@ class LDTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x42, gb.cpu.C);
         assertEquals(12, gb.cpu.cycles); // 8 for LD B,d8, 4 for STOP
-        assertEquals(0x0004, gb.cpu.PC); // 1 + LD (BC),A, 1 for STOP
+        assertEquals(0x0004, gb.cpu.PC); // 1 + LD (BC),A, 2 for STOP
     }
 }

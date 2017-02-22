@@ -17,7 +17,7 @@ class RRCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x01, gb.cpu.A);
         assertEquals(8, gb.cpu.cycles); // 4 for RRCA, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 for RRCA, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 for RRCA, 2 for STOP
         // Flags
         assertEquals(0x00, gb.cpu.z);
         assertEquals(0x00, gb.cpu.n);
@@ -36,7 +36,7 @@ class RRCTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x00, gb.cpu.A);
         assertEquals(8, gb.cpu.cycles); // 4 for RRCA, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 for RRCA, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 for RRCA, 2 for STOP
         // Flags
         assertEquals(0x00, gb.cpu.z);
         assertEquals(0x00, gb.cpu.n);

@@ -17,7 +17,7 @@ class DECTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x01, gb.cpu.B);
         assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // It's not going to 0
         assertEquals(1, gb.cpu.n); // Should be one
@@ -35,7 +35,7 @@ class DECTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0xFF, gb.cpu.B);
         assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
         assertEquals(1, gb.cpu.z); // Underflowing
         assertEquals(1, gb.cpu.n); // Should be one
@@ -53,7 +53,7 @@ class DECTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x0F, gb.cpu.B);
         assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // Should not going to zero
         assertEquals(1, gb.cpu.n); // Should be one
@@ -71,7 +71,7 @@ class DECTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x01, gb.cpu.BC);
         assertEquals(12, gb.cpu.cycles); // 8 for DEC BC, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
     }
 
     function test_DEC_C_normal() {
@@ -85,7 +85,7 @@ class DECTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x01, gb.cpu.C);
         assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // It's not going to 0
         assertEquals(1, gb.cpu.n); // Should be one
@@ -103,7 +103,7 @@ class DECTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0xFF, gb.cpu.C);
         assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
         assertEquals(1, gb.cpu.z); // Underflowing
         assertEquals(1, gb.cpu.n); // Should be one
@@ -121,7 +121,7 @@ class DECTest extends OpcodeTest {
         // Registers and timing check
         assertEquals(0x0F, gb.cpu.C);
         assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 1 for STOP
+        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
         assertEquals(0, gb.cpu.z); // Should not going to zero
         assertEquals(1, gb.cpu.n); // Should be one
