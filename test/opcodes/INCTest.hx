@@ -1,20 +1,11 @@
 package opcodes;
 
-import haxeboy.Gameboy;
 import haxeboy.ROM;
 import haxe.io.Bytes;
 
 using opcodes.TestTools;
 
-class INCTest extends haxe.unit.TestCase {
-    public static inline var HALT:Int = 0x76;
-
-    var gb:Gameboy;
-
-    override public function setup() {
-        gb = new Gameboy();
-    }
-
+class INCTest extends OpcodeTest {
     function test_INC_BC() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x03, HALT]);

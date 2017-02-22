@@ -9,6 +9,7 @@ class RunTests extends haxe.unit.TestCase {
         r.add(new LDTest());
         r.add(new INCTest());
         r.add(new DECTest());
+        r.add(new RLCTest());
         r.run();
       }
 }

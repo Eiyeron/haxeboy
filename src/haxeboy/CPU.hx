@@ -262,6 +262,17 @@ class CPU {
 
                 PC += 2;
                 cyclesToBurn += 8;
+            case 0x07:
+                // rlca
+                var Ap = A;
+                A >>= 1;
+                h = 0;
+                n = 0;
+                z = 0;
+                Cy = (Ap & 0x01 == 1 ) ? 1 : 0;
+
+                PC += 1;
+                cyclesToBurn += 4;
             // ...
             case 0x76:
                 // halt
