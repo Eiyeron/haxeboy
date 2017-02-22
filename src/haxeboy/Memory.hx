@@ -1,39 +1,37 @@
 package haxeboy;
 
-<<<<<<< HEAD
 import haxeboy.Cartridge;
-=======
 import haxeboy.Tools.*;
->>>>>>> simplified haxeboy.Memory::getValue by use of Tools.inRange, and inlined haxeboy.Memory::getValue16
 
 using haxeboy.Tools;
 
 class Memory {
-    /// Mockup of eventual API ///
 
-    //public var rom(default, null):ROM;
-    public var cartridge(default, null): Cartridge;
+/* === Instance Fields === */
+    public var cartridge(default, null):Cartridge;
 
-    public var vram(default, null):VRAM;
-    public var eram(default, null):ERAM;
-    public var wram(default, null):WRAM;
-    public var oam(default, null):OAM;
-    public var iop(default, null):IOP;
-    public var hram(default, null):HRAM;
+	public var vram(default, null):VRAM;
+	public var eram(default, null):ERAM;
+	public var wram(default, null):WRAM;
+	public var oam(default, null):OAM;
+	public var iop(default, null):IOP;
+	public var hram(default, null):HRAM;
 
-    public function new() {
+	/* Constructor Function */
+	public function new():Void {
 
-        vram = new VRAM();
+		vram = new VRAM();
 
-        eram = new ERAM();
+		eram = new ERAM();
 
-        wram = new WRAM();
+		wram = new WRAM();
 
-        oam = new OAM();
+		oam = new OAM();
 
-        hram = new HRAM();
-    }
+		hram = new HRAM();
+	}
 
+/* === Instance Methods === */
     public function linkCartrdige(cartridge:Cartridge) : Void
     {
         this.cartridge = cartridge;
@@ -154,10 +152,9 @@ class Memory {
             // throw MemoryAccesException('Out of Bounds');
             return ;
         }
-
     }
 
-    public inline function getValue16(address:Int) {
-        return (getValue( address ) << 8) | (getValue(address + 1));
-    }
+	public inline function getValue16(address:Int) {
+		return (getValue( address ) << 8) | (getValue(address + 1));
+	}
 }
