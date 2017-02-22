@@ -8,7 +8,7 @@ class Memory {
     public var rom(default, null):ROM;
 
     public var vram(default, null):VRAM;
-    // var eram:ERAM;
+    public var eram(default, null):ERAM;
     public var wram(default, null):WRAM;
     public var oam(default, null):OAM;
     // var iop:IOP;
@@ -18,6 +18,8 @@ class Memory {
         rom = new ROM();
 
         vram = new VRAM();
+
+        eram = new ERAM();
 
         wram = new WRAM();
 

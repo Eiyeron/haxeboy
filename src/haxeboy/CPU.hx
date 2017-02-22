@@ -163,7 +163,6 @@ class CPU {
             F &= ~(1 << 7);
             return 0;
         } else {
-
             F |= (1 << 7);
             return 1;
         }
