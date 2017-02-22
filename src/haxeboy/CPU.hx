@@ -99,42 +99,20 @@ class CPU {
     }
 
     /// Register getters ///
-<<<<<<< HEAD
-    /*
-       all register-getters should be inlined, as they will be invoked very frequently,
-       and that many extra funtion calls will bog down the JS interpreter
-    */
-
     public inline function get_AF():Int {
-        return ((A << 8) & 0xFF) | (F & 0xFF);
-    }
-
-    public inline function get_BC():Int {
-        return ((B << 8) & 0xFF) | (C & 0xFF);
-    }
-
-    public inline function get_DE():Int {
-        return ((D << 8) & 0xFF) | (E & 0xFF);
-    }
-
-    public inline function get_HL():Int {   
-        return ((H << 8) & 0xFF) | (L & 0xFF);
-=======
-    public function get_AF():Int {
         return (A << 8) | F;
     }
 
-    public function get_BC():Int {
+    public inline function get_BC():Int {
         return (B << 8) | C;
     }
 
-    public function get_DE():Int {
+    public inline function get_DE():Int {
         return (D << 8) | E;
     }
 
-    public function get_HL():Int {
+    public inline function get_HL():Int {
         return (H << 8) | L;
->>>>>>> master
     }
 
     public inline function get_z():Int {
@@ -219,9 +197,6 @@ class CPU {
             return 1;
         }
     }
-<<<<<<< HEAD
-}
-=======
 
     // If a+b triggers the half-carry on the lower nibble, then return 1 else 0
     private function get_half_carry_from_addition(a:Int, b:Int): Int {
@@ -411,4 +386,3 @@ class CPU {
         }
     }
 }
->>>>>>> master
