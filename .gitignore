@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-
-=======
 # Build results
->>>>>>> master
 *.n
-build
+build/haxeboy.js
 
 # IDE or text editor stuff
 *.vscode
