@@ -1,5 +1,6 @@
 
--main Main
+-main WebMain
+-lib slambda
 -cp src/
 -js build/haxeboy.js
 
