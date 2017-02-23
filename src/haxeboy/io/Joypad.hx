@@ -1,6 +1,6 @@
 package haxeboy.io;
 
-import haxeboy.MemoryMappable;
+import haxeboy.core.MemoryMappable;
 
 // Those two enumerations are bitmasks allowing people to easily get a specific
 // button from the given value or to set their flag.

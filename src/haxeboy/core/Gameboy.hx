@@ -3,57 +3,52 @@ package haxeboy.core;
 import haxe.io.Bytes;
 
 class Gameboy {
-	/* Constructor Function */
-	public function new():Void {
-		cpu = new CPU();
-		memory = new Memory();
-		cpu.memory = memory;
-		turned_on = false;
-	}
+    public var cpu(default, null):CPU;
+    public var memory(default, null):Memory;
+    public var cartridge(default, null):Cartridge;
 
-	/* === Instance Methods === */
+    public var turned_on(default, null):Bool;
 
-	/// Mockup of eventual API ///
-	// TODO : like, everything? I haven't thought of a final API.
+    public function new()
+    {
+        cpu = new CPU();
+        memory = new Memory();
+        cpu.memory = memory;
+        turned_on = false;
 
-	/**
-	 * this run method need not be here
-	 */
-	public function run() {
-		turned_on = true;
+       // var cart: Bytes = Bytes.alloc(32*1024);
+       // cart.set(0x0147, 0x9);
 
-		while(turned_on && !cpu.stopped) {
-			cpu.step();
-		}
-	}
+        // insertCart(File.getBytes('main.gb'));
+    }
 
-	// why?
-	public inline function reset():Void {
-		// cpu.reset();
-		// memory.reset();
-	}
+    /// Mockup of eventual API ///
+    // TODO : like, everything? I haven't thought of a final API.
 
-	/**
-	 * emulate the insertion of a game cartridge
-	 */
-	public inline function insertCart(cartData : Bytes):Void {
-		memory.rom.loadCart(cartData);
-	}
+    public function run() {
+        turned_on = true;
 
-	/**
-	 * emulate the removal of a game cartridge
-	 */
-	public inline function removeCart():Void {
-		memory.rom.removeCart();
-	}
+        while(turned_on && !cpu.stopped) {
+            cpu.step();
+        }
+    }
+
+    public function reset() {
+        // cpu.reset();
+        // memory.reset();
+    }
+
+    public function insertCart(cartData:Bytes) {
+        //memory.rom.loadCart(cartData);
+        cartridge = new haxeboy.Cartridge(cartData);
+        memory.linkCartrdige(cartridge);
+    }
+
+    public function removeCart() {
+        //cartridge.removeCart();
+    }
 
 	public inline function activate():Void turned_on = true;
 	public inline function deactivate():Void turned_on = false;
 
-	/* === Instance Fields === */
-
-	public var cpu(default, null):CPU;
-	public var memory(default, null):Memory;
-
-	public var turned_on(default, null):Bool;
 }

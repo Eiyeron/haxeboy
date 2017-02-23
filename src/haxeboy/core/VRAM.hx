@@ -32,7 +32,7 @@ class VRAM implements MemoryMappable {
 				return tile_banks[num_bank].get(address - num_bank * VRAM_TILE_BANK_SIZE);
 			}
 			else {
-				var num_bank:Int = Std.int((address - 0x1800) / VRAM_MAP_BANK_SIZE);                
+				var num_bank:Int = Std.int((address - 0x1800) / VRAM_MAP_BANK_SIZE);
 				return map_banks[num_bank].get(address - 0x1800 - num_bank * VRAM_TILE_BANK_SIZE);
 			}
 		}
@@ -48,7 +48,7 @@ class VRAM implements MemoryMappable {
 				tile_banks[num_bank].set(address - num_bank * VRAM_TILE_BANK_SIZE, value);
 			}
 			else {
-				var num_bank:Int = Std.int((address - 0x1800) / VRAM_MAP_BANK_SIZE);                
+				var num_bank:Int = Std.int((address - 0x1800) / VRAM_MAP_BANK_SIZE);
 				map_banks[num_bank].set(address - 0x1800 - num_bank * VRAM_TILE_BANK_SIZE, value);
 			}
 		}

@@ -1,5 +1,6 @@
 package haxeboy.mbc;
 
+import haxeboy.core.MemoryMappable;
 import haxe.io.Bytes;
 import haxe.io.UInt8Array;
 

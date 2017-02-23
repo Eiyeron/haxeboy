@@ -1,6 +1,6 @@
 package haxeboy.io;
 
-using haxeboy.Tools;
+using haxeboy.core.Tools;
 
 @:enum
 abstract PaletteColor(Int) from Int to Int {

@@ -1,7 +1,8 @@
 package haxeboy;
 
-using haxeboy.Tools;
+using haxeboy.core.Tools;
 
+import haxeboy.core.MemoryMappable;
 import haxeboy.io.Joypad;
 import haxeboy.io.Serial;
 import haxeboy.io.Timer;

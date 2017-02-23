@@ -1,6 +1,6 @@
 package haxeboy.core;
 
-import haxeboy.core.Tools.*;
+import haxeboy.core.Tools.invalidAddress;
 
 class SpriteAttribute implements MemoryMappable {
 	/* Constructor Function */
@@ -100,7 +100,7 @@ class SpriteAttribute implements MemoryMappable {
 		if (value == 0) {
 			attribute &= ~(1 << 7);
 			return 0;
-		} 
+		}
 		else {
 			attribute |= (1 << 7);
 			return 1;

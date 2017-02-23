@@ -1,9 +1,12 @@
 package haxeboy.mbc;
 
+import haxeboy.core.MemoryMappable;
+import haxeboy.core.MemoryBankBased;
 import haxe.io.Bytes;
 import haxe.io.UInt8Array;
 
-using haxeboy.Tools;
+import haxeboy.core.Tools.invalidAddress;
+using haxeboy.core.Tools;
 
 // TODO : add memory mapping support.
 class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {

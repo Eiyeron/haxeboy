@@ -1,6 +1,6 @@
 package haxeboy.io;
 
-import haxeboy.MemoryMappable;
+import haxeboy.core.MemoryMappable;
 
 /**
  *
