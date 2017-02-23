@@ -229,9 +229,9 @@ class CPU {
             case 0x01:
                 // ld BC,nn
                 // Z- n- H- C-
-                BC = memory.getValue16(PC+1);
+                PC++;
+                BC = take16BitValue();
 
-                PC += 3;
                 cyclesToBurn = 12;
             case 0x02:
                 // ld (BC),a
@@ -274,9 +274,9 @@ class CPU {
             case 0x06:
                 // ld b, d8
                 // Z- n- H- C-
-                B = memory.getValue(PC + 1);
+                PC++;
+                B = take8BitValue();
 
-                PC += 2;
                 cyclesToBurn += 8;
             case 0x07:
                 // rlca
@@ -293,8 +293,9 @@ class CPU {
             case 0x08:
                 // ld SP,nn
                 // Z- n- H- C-
-                SP = memory.getValue16(PC+1);
-                PC += 3;
+                PC++;
+                SP = take16BitValue();
+
                 cyclesToBurn = 20;
             case 0x09:
                 // add HL, BC (Hl += BC)
@@ -353,9 +354,9 @@ class CPU {
             case 0x0E:
                 // ld c, d8
                 // Z- n- H- C-
-                C = memory.getValue(PC + 1);
+                PC++;
+                C = take8BitValue();
 
-                PC += 2;
                 cyclesToBurn += 8;
 
             case 0x0F:
@@ -376,7 +377,13 @@ class CPU {
                 stop_requested = true;
                 PC += 2;
                 cyclesToBurn = 4;
-
+            
+            case 0x11:
+                //ld de, d16
+                //Z- N- H- C-
+                PC++;
+                DE = take16BitValue();
+                cyclesToBurn = 12;
             // ...
             case 0x76:
                 // halt
@@ -384,5 +391,18 @@ class CPU {
                 PC += 1;
                 cyclesToBurn = 4;
         }
+    }
+
+    //take 8 bit value starting at current PC, increment PC
+    function take8BitValue(): Int {
+        var value: Int = memory.getValue(PC++);
+        return value;
+    }
+
+    //take 16 bit value starting at current PC, increment PC by 2
+    function take16BitValue(): Int {
+        var value: Int = memory.getValue16(PC++);
+        PC++;
+        return value;
     }
 }

@@ -43,7 +43,7 @@ class ROM implements MemoryMappable implements MemoryBankBased {
         // ROM banks : Bank 0 and Bank 1-127 (which is bank swappable).
         // Thus we're capping to up to the two accessible rom banks or lower
         // if the ROM only contains one ROM bank.
-        if(num_bank > Math.min(real_number_of_rom_banks - 1, 2)) {
+        if(num_bank > Math.min(real_number_of_rom_banks - 1, 1)) {
             return 0;
         }
 
