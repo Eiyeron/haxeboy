@@ -11,7 +11,7 @@ class Memory {
     public var eram(default, null):ERAM;
     public var wram(default, null):WRAM;
     public var oam(default, null):OAM;
-    // var iop:IOP;
+    public var iop(default, null):IOP;
     public var hram(default, null):HRAM;
 
     public function new() {
@@ -24,6 +24,8 @@ class Memory {
         wram = new WRAM();
 
         oam = new OAM();
+
+
 
         hram = new HRAM();
     }
@@ -66,8 +68,7 @@ class Memory {
         }
         // IO ports
         else if (address.inRange(0xFF00,0xFF7F)) {
-            // return iop.getValue(address - 0xFF00);
-            return 0xFF;
+            return iop.getValue(address - 0xFF00);
         }
         // HRAM (High RAM)
         else if (address.inRange(0xFF80, 0xFFFE)) {
