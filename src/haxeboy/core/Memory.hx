@@ -1,7 +1,6 @@
 package haxeboy.core;
 
 import haxeboy.Cartridge;
-
 using haxeboy.core.Tools;
 
 class Memory {
