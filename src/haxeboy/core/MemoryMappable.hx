@@ -1,4 +1,4 @@
-package haxeboy;
+package haxeboy.core;
 
 interface MemoryMappable {
     public function getValue(address:Int):Int;

@@ -1,6 +1,6 @@
-package haxeboy;
+package haxeboy.core;
 
-import haxeboy.Tools.*;
+import haxeboy.core.Tools.*;
 
 class SpriteAttribute implements MemoryMappable {
 	/* Constructor Function */

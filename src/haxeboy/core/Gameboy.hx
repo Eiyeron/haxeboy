@@ -1,4 +1,4 @@
-package haxeboy;
+package haxeboy.core;
 
 import haxe.io.Bytes;
 

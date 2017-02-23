@@ -1,6 +1,6 @@
-package haxeboy;
+package haxeboy.core;
 
-using haxeboy.Tools;
+using haxeboy.core.Tools;
 
 class Memory {
 	/* Constructor Function */
@@ -20,7 +20,7 @@ class Memory {
 
 /* === Instance Methods === */
 
-	public function getValue(addressv : Int):Int {
+	public function getValue(address : Int):Int {
 		// ROM
 		if (address.inRange(0x0000, 0x7FFF)) {
 			return rom.getValue(address);
