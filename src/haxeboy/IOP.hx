@@ -1,14 +1,16 @@
 package haxeboy;
 
+using haxeboy.Tools;
+
 import haxeboy.io.Joypad;
+import haxeboy.io.Serial;
 
 class IOP implements MemoryMappable {
 
     var joypad:Joypad;
 
     // Serial data
-    var serial_data:Int;                // $FF01
-    var serial_control:Int;             // $FF02
+    var serial_port:Serial;
 
     // Timer values
     var timer_divider_register:Int;     // $FF04
@@ -38,18 +40,17 @@ class IOP implements MemoryMappable {
     public function new()
     {
         joypad = new Joypad();
+        serial_port = new Serial();
         // TODO : assign the other registers default values
     }
 
     public function getValue(address:Int):Int {
-        switch(address) {
-            case 0x00:
-            return joypad.getValue(address - 0x00);
-            case 0x01:
-            return serial_data;
-            case 0x02:
-            return serial_control;
-
+        if (address == 0x00)
+            return joypad.getValue(address);
+        else if(address.inRange(0x01, 0x02)) {
+            return serial_port.getValue(address - 0x01);
+        }
+        else switch(address) {
             case 0x04:
             return timer_divider_register;
             case 0x05:
@@ -91,47 +92,45 @@ class IOP implements MemoryMappable {
     }
 
     public function setValue(address:Int, value:Int) {
-        switch(address) {
-            case 0x00:
-            joypad.setValue(address - 0x00, value);
-            case 0x01:
-            serial_data = value;
-            case 0x02:
-            serial_control = value;
+            if (address == 0x00)
+                return joypad.setValue(address, value);
+            else if(address.inRange(0x01, 0x02)) {
+                return serial_port.setValue(address - 0x01, value);
+            }
+            else switch(address) {
+                case 0x04:
+                timer_divider_register = value;
+                case 0x05:
+                timer_counter = value;
+                case 0x06:
+                timer_modulo = value;
+                case 0x07:
+                timer_control = value;
 
-            case 0x04:
-            timer_divider_register = value;
-            case 0x05:
-            timer_counter = value;
-            case 0x06:
-            timer_modulo = value;
-            case 0x07:
-            timer_control = value;
-
-            case 0x40:
-            lcd_control = value;
-            case 0x41:
-            lcd_stat = value;
-            case 0x42:
-            lcd_scy = value;
-            case 0x43:
-            lcd_scx = value;
-            case 0x44:
-            lcd_ly = value;
-            case 0x45:
-            lcd_lyc = value;
-            case 0x46:
-            lcd_dma_transfer_address = value;
-            case 0x47:
-            bg_palette = value;
-            case 0x48:
-            obj0_palette = value;
-            case 0x49:
-            obj1_palette = value;
-            case 0x4A:
-            lcd_wy = value;
-            case 0x4B:
-            lcd_wx = value;
+                case 0x40:
+                lcd_control = value;
+                case 0x41:
+                lcd_stat = value;
+                case 0x42:
+                lcd_scy = value;
+                case 0x43:
+                lcd_scx = value;
+                case 0x44:
+                lcd_ly = value;
+                case 0x45:
+                lcd_lyc = value;
+                case 0x46:
+                lcd_dma_transfer_address = value;
+                case 0x47:
+                bg_palette = value;
+                case 0x48:
+                obj0_palette = value;
+                case 0x49:
+                obj1_palette = value;
+                case 0x4A:
+                lcd_wy = value;
+                case 0x4B:
+                lcd_wx = value;
 
             // TODO: determine what to do when accessing non mapped addresses.
             default:

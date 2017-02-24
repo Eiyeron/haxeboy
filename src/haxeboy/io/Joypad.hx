@@ -35,14 +35,14 @@ abstract SwitchPolling(Int) {
  */
 class Joypad implements MemoryMappable {
 
-        var pollingState:SwitchPolling;
-        var buttonsState:Int;
-        var directionsState:Int;
+        var polling_state:SwitchPolling;
+        var buttons_state:Int;
+        var directions_state:Int;
 
         public function new() {
-            pollingState = SelectButtonPolling;
-            buttonsState = 0;
-            directionsState = 0;
+            polling_state = SelectButtonPolling;
+            buttons_state = 0;
+            directions_state = 0;
         }
 
         // TODO : link to actual functions.
@@ -54,20 +54,20 @@ class Joypad implements MemoryMappable {
         }
 
         public function getValue(address:Int):Int {
-            switch(pollingState) {
+            switch(polling_state) {
                 case SelectButtonPolling:
-                    return buttonsState;
+                    return buttons_state;
                 case SelectDirectionPolling:
-                    return directionsState;
+                    return directions_state;
             }
         }
 
         public function setValue(address:Int, value:Int) {
             if ( (value & cast SelectDirectionPolling) != 0) {
-                pollingState = SelectDirectionPolling;
+                polling_state = SelectDirectionPolling;
             }
             else if ( (value & cast SelectButtonPolling) != 0) {
-                pollingState = SelectButtonPolling;
+                polling_state = SelectButtonPolling;
             }
         }
 
