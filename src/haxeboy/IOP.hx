@@ -5,6 +5,7 @@ using haxeboy.Tools;
 import haxeboy.io.Joypad;
 import haxeboy.io.Serial;
 import haxeboy.io.Timer;
+import haxeboy.io.Palette;
 
 class IOP implements MemoryMappable {
 
@@ -26,9 +27,10 @@ class IOP implements MemoryMappable {
         // LCD OAM DMA
     var lcd_dma_transfer_address:Int;   // $FF46
         // Palettes
-    var bg_palette:Int;                 // $FF47
-    var obj0_palette:Int;               // $FF48
-    var obj1_palette:Int;               // $FF49
+    // TODO : move them into the future LCDC class
+    var bg_palette:Palette;                 // $FF47
+    var obj0_palette:Palette;               // $FF48
+    var obj1_palette:Palette;               // $FF49
         // Window position
     var lcd_wy:Int;                     // $FF4A
     var lcd_wx:Int;                     // $FF4B
