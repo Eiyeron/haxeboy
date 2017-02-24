@@ -3,14 +3,14 @@ package haxeboy.io;
 import haxeboy.MemoryMappable;
 
 @:enum
-abstract TransferControlBits(Int) {
+abstract TransferControlBits(Int) from Int to Int {
     var ShiftClock = 1 << 0;
     var ClockSpeed = 1 << 1;
     var TransferStart = 1 << 7;
 }
 
 @:enum
-abstract ClockType(Int) {
+abstract ClockType(Int) from Int to Int {
     var ExternalClock = 0;
     var InternalClock = 1 << 0;
 }
@@ -43,7 +43,7 @@ class Serial implements MemoryMappable {
         // Put the received data into the port.
         transfer_data = value_to_receive;
         // Tell the communication ended
-        transfer_control &= ~(cast TransferStart);
+        transfer_control &= ~TransferStart;
         // TODO : interruption here
         return value_to_send;
     }
@@ -52,7 +52,7 @@ class Serial implements MemoryMappable {
         // TODO : manage settings
 
         // TODO : manage clock switch
-        switch (cast (new_control_value & cast ShiftClock)) {
+        switch (new_control_value & ShiftClock) {
             case ExternalClock:
                 clock_type = ExternalClock;
             case InternalClock:

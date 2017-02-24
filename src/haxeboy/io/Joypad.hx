@@ -5,14 +5,14 @@ import haxeboy.MemoryMappable;
 // Those two enumerations are bitmasks allowing people to easily get a specific
 // button from the given value or to set their flag.
 @:enum
-abstract DirectionBits(Int) {
+abstract DirectionBits(Int) from Int to Int {
     var  RightButton = 1 << 0;
     var  LeftButton = 1 << 1;
     var  UpButton = 1 << 2;
     var  DownButton = 1 << 3;
 }
 @:enum
-abstract ButtonBits(Int) {
+abstract ButtonBits(Int) from Int to Int {
     var  AButton = 1 << 0;
     var  BButton = 1 << 1;
     var  SelectButton = 1 << 2;
@@ -21,7 +21,7 @@ abstract ButtonBits(Int) {
 
 // Bitmask that get the required kind of buttons to poll.
 @:enum
-abstract SwitchPolling(Int) {
+abstract SwitchPolling(Int) from Int to Int {
     var SelectDirectionPolling = 1 << 4;
     var SelectButtonPolling = 1 << 5;
 }
@@ -63,10 +63,10 @@ class Joypad implements MemoryMappable {
         }
 
         public function setValue(address:Int, value:Int) {
-            if ( (value & cast SelectDirectionPolling) != 0) {
+            if ( (value & SelectDirectionPolling) != 0) {
                 polling_state = SelectDirectionPolling;
             }
-            else if ( (value & cast SelectButtonPolling) != 0) {
+            else if ( (value & SelectButtonPolling) != 0) {
                 polling_state = SelectButtonPolling;
             }
         }
