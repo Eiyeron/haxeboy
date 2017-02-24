@@ -26,6 +26,13 @@ abstract SwitchPolling(Int) {
     var SelectButtonPolling = 1 << 5;
 }
 
+/**
+ *  The Gameboy uses a single byte port to handle the joypad.
+ *  Using a state-based controller, it allows fetching directions or butttons
+ *  by writing two specific bits to this port.
+ *
+ *  TODO : Add an interruption notification when a button is pressed; (cf http://bgb.bircd.org/pandocs.htm#joypadinput)
+ */
 class Joypad implements MemoryMappable {
 
         var pollingState:SwitchPolling;
@@ -38,8 +45,12 @@ class Joypad implements MemoryMappable {
             directionsState = 0;
         }
 
-        public function pollButtonsState() {
-            // TODO : link to actual functions.
+        // TODO : link to actual functions.
+        /**
+         *  This function should be called from the wrapping system to update
+         *  the button states.
+         */
+        public function updateButtonState() {
         }
 
         public function getValue(address:Int):Int {
