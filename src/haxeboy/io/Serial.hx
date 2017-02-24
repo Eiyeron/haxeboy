@@ -29,7 +29,7 @@ class Serial implements MemoryMappable {
 
     public function new () {
         transfer_data = 0;
-        transfer_control = 0;
+        transfer_control = 1 << 2; // Halt the timer
         clock_type = ExternalClock;
     }
 

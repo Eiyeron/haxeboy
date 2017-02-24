@@ -4,19 +4,15 @@ using haxeboy.Tools;
 
 import haxeboy.io.Joypad;
 import haxeboy.io.Serial;
+import haxeboy.io.Timer;
 
 class IOP implements MemoryMappable {
 
     var joypad:Joypad;
 
-    // Serial data
     var serial_port:Serial;
 
-    // Timer values
-    var timer_divider_register:Int;     // $FF04
-    var timer_counter:Int;              // $FF05
-    var timer_modulo:Int;               // $FF06
-    var timer_control:Int;              // $FF07
+    var timer:Timer;
 
     // LCDC (LCD Controll)
     var lcd_control:Int;                // $FF40
@@ -41,6 +37,7 @@ class IOP implements MemoryMappable {
     {
         joypad = new Joypad();
         serial_port = new Serial();
+        timer = new Timer();
         // TODO : assign the other registers default values
     }
 
@@ -50,16 +47,10 @@ class IOP implements MemoryMappable {
         else if(address.inRange(0x01, 0x02)) {
             return serial_port.getValue(address - 0x01);
         }
+        else if(address.inRange(0x04, 0x07)) {
+            return timer.getValue(address - 0x04);
+        }
         else switch(address) {
-            case 0x04:
-            return timer_divider_register;
-            case 0x05:
-            return timer_counter;
-            case 0x06:
-            return timer_modulo;
-            case 0x07:
-            return timer_control;
-
             case 0x40:
             return lcd_control;
             case 0x41:
@@ -97,16 +88,10 @@ class IOP implements MemoryMappable {
             else if(address.inRange(0x01, 0x02)) {
                 return serial_port.setValue(address - 0x01, value);
             }
+            else if(address.inRange(0x04, 0x07)) {
+                return timer.setValue(address - 0x04, value);
+            }
             else switch(address) {
-                case 0x04:
-                timer_divider_register = value;
-                case 0x05:
-                timer_counter = value;
-                case 0x06:
-                timer_modulo = value;
-                case 0x07:
-                timer_control = value;
-
                 case 0x40:
                 lcd_control = value;
                 case 0x41:
