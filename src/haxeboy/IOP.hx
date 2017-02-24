@@ -1,8 +1,10 @@
 package haxeboy;
 
+import haxeboy.io.Joypad;
+
 class IOP implements MemoryMappable {
 
-    var joypad_state:Int;               // $FF00
+    var joypad:Joypad;
 
     // Serial data
     var serial_data:Int;                // $FF01
@@ -33,10 +35,16 @@ class IOP implements MemoryMappable {
     var lcd_wy:Int;                     // $FF4A
     var lcd_wx:Int;                     // $FF4B
 
+    public function new()
+    {
+        joypad = new Joypad();
+        // TODO : assign the other registers default values
+    }
+
     public function getValue(address:Int):Int {
         switch(address) {
             case 0x00:
-            return joypad_state;
+            return joypad.getValue(address - 0x00);
             case 0x01:
             return serial_data;
             case 0x02:
@@ -85,7 +93,7 @@ class IOP implements MemoryMappable {
     public function setValue(address:Int, value:Int) {
         switch(address) {
             case 0x00:
-            joypad_state = value;
+            joypad.setValue(address - 0x00, value);
             case 0x01:
             serial_data = value;
             case 0x02:
