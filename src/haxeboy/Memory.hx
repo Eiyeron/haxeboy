@@ -48,7 +48,8 @@ class Memory {
         else if (address.inRange(0xA000, 0xBFFF)) {
             // Beware, this part can be changed from the cart side.
             // return external_ram.getValue(address - 0xA000);
-            return 0xFF;
+            //return 0xFF;
+            return cartridge.getValue(address);
         }
         // Work RAM bank 0, always present
         else if (address.inRange(0xC000, 0xCFFF)) {
@@ -105,6 +106,7 @@ class Memory {
         }
         // External RAM
         else if(address.inRange(0xA000, 0xBFFF)) {
+            return cartridge.setValue(address, value);
             // Beware, this part can be changed from the cart side.
             // return external_ram.setValue(address - 0xA000, value);
             return;
