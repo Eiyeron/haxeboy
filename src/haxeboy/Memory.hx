@@ -1,11 +1,14 @@
 package haxeboy;
 
+import haxeboy.Cartridge;
+
 using haxeboy.Tools;
 
 class Memory {
     /// Mockup of eventual API ///
 
-    public var rom(default, null):ROM;
+    //public var rom(default, null):ROM;
+    public var cartridge(default, null): Cartridge;
 
     public var vram(default, null):VRAM;
     public var eram(default, null):ERAM;
@@ -15,7 +18,9 @@ class Memory {
     public var hram(default, null):HRAM;
 
     public function new() {
-        rom = new ROM();
+        //rom = new ROM();
+
+        cartridge = new Cartridge(null);
 
         vram = new VRAM();
 
@@ -91,7 +96,8 @@ class Memory {
     public function setValue(address:Int, value:Int) {
         // ROM
         if(address.inRange(0x0000, 0x7FFF)) {
-            return rom.setValue(address, value);
+            return cartridge.setValue(address, value);
+           // return rom.setValue(address, value);
         }
         // VRAM
         else if(address.inRange(0x8000, 0x9FFF)) {
