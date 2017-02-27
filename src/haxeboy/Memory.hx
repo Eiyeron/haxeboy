@@ -38,7 +38,7 @@ class Memory {
     public function getValue(address:Int):Int {
         // ROM
         if (address.inRange(0x0000, 0x7FFF)) {
-            return rom.getValue(address);
+            return cartridge.getValue(address);
         }
         // VRAM
         else if (address.inRange(0x8000, 0x9FFF)) {

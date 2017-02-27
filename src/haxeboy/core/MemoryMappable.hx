@@ -1,5 +1,7 @@
 package haxeboy.core;
 
+import haxe.io.Bytes;
+
 interface MemoryMappable {
     public function getValue(address:Int):Int;
 

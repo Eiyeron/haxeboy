@@ -3,8 +3,10 @@ package haxeboy.mbc;
 import haxe.io.Bytes;
 import haxe.io.UInt8Array;
 
+using haxeboy.Tools;
+
 // TODO : add memory mapping support.
-class MBC1 implements MemoryMappable implements MemoryBankBased {
+class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
     public static inline var ROM_BANK_SIZE:Int = 16 * 1024; // 16 kB
 
     var banks: Array<UInt8Array>;
@@ -58,8 +60,42 @@ class MBC1 implements MemoryMappable implements MemoryBankBased {
         }
     }
 
-    // TODO: Actually, this function is useful as it's used for bank switch.
     public function setValue(address:Int, value:Int) {
+        var ramMode: Bool = false;
+        var ramBank: Int = 0;
+        var romBank: Int = 0;
+
+        if(address.inRange(0xA000, 0xBFFF)) {
+            //RAM, should be handled in MBC
+        }
+        else if(address.inRange(0x000, 0x1FFF)) {
+            if(value & 0xF == 0xA) {
+                //ENABLE RAM
+            }
+            else {
+                //DISABLE RAM
+            }
+        }
+        else if(address.inRange(0x2000, 0x3FFF)) {
+            romBank = (romBank & (0x60)) | (value & 0x1F);
+            //USE THIS
+        }
+        else if(address.inRange(0x4000, 0x5FFF)) {
+            if(ramMode) {
+                ramBank = value & 0x3;
+            }
+            else {
+                romBank = ((value & 0x3) << 5) | (romBank & 0x1F);
+            }
+        }
+        else if(address.inRange(0x6000, 0x7FFF)) {
+            if(address == 1) {
+                ramMode = true;
+            }
+            else {
+                ramMode = false;
+            }
+        }
     }
 
     public function getValueAtBank(bank:Int, address:Int) {
