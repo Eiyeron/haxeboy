@@ -63,7 +63,6 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
     public function setValue(address:Int, value:Int) {
         var ramMode: Bool = false;
         var ramBank: Int = 0;
-        var romBank: Int = 0;
 
         if(address.inRange(0xA000, 0xBFFF)) {
             //RAM, should be handled in MBC
@@ -77,7 +76,7 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
             }
         }
         else if(address.inRange(0x2000, 0x3FFF)) {
-            romBank = (romBank & (0x60)) | (value & 0x1F);
+            current_rom_bank = (current_rom_bank & (0x60)) | (value & 0x1F);
             //USE THIS
         }
         else if(address.inRange(0x4000, 0x5FFF)) {
@@ -85,7 +84,7 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
                 ramBank = value & 0x3;
             }
             else {
-                romBank = ((value & 0x3) << 5) | (romBank & 0x1F);
+                current_rom_bank = ((value & 0x3) << 5) | (current_rom_bank & 0x1F);
             }
         }
         else if(address.inRange(0x6000, 0x7FFF)) {
