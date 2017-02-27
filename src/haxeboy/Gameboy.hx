@@ -6,6 +6,7 @@ import sys.io.File;
 class Gameboy {
     public var cpu(default, null):CPU;
     public var memory(default, null):Memory;
+    public var cartridge(default, null):Cartridge;
 
     public var turned_on(default, null):Bool;
 
@@ -39,11 +40,12 @@ class Gameboy {
     }
 
     public function insertCart(cartData:Bytes) {
-        memory.rom.loadCart(cartData);
-        new haxeboy.Cartridge(cartData);
+        //memory.rom.loadCart(cartData);
+        cartridge = new haxeboy.Cartridge(cartData);
+        memory.linkCartrdige(cartridge);
     }
 
     public function removeCart() {
-        memory.rom.removeCart();
+        //cartridge.removeCart();
     }
 }

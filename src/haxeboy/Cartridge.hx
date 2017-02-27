@@ -1,9 +1,14 @@
 package haxeboy;
 
 import haxe.io.Bytes;
+import haxeboy.mbc.*;
+
+using haxeboy.Tools;
 
 class Cartridge {
     var header: HeaderInfo;
+
+    var MBC: MBC;
 
     public function new(data: Bytes) {
         header = {TITLE: ''};
@@ -21,6 +26,26 @@ class Cartridge {
             default:
                 throw 'unknown destination code: ' + StringTools.hex(data.get(HeaderLocation.DESTINATION_CODE));
         }
+
+        switch(header.CARTRIDGE_TYPE) {
+            case CartridgeType.ROM_ONLY:
+                MBC = new ROM();
+            case CartridgeType.MBC1:
+                MBC = new MBC1(false);
+            case CartridgeType.MBC1_RAM | CartridgeType.MBC1_RAM_BATTERY:
+                MBC = new MBC1(true);
+            default:
+                throw 'unsupported cartridge type: ' + StringTools.hex(header.CARTRIDGE_TYPE);
+        }
+        MBC.loadCart(data);
+    }
+
+    public function setValue(address: Int, value: Int) {
+        MBC.setValue(address, value);
+    }
+
+    public function getValue(address: Int): Int {
+        return MBC.getValue(address);
     }
 }
 

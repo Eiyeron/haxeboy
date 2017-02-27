@@ -1,11 +1,14 @@
 package haxeboy;
 
+import haxeboy.Cartridge;
+
 using haxeboy.Tools;
 
 class Memory {
     /// Mockup of eventual API ///
 
-    public var rom(default, null):ROM;
+    //public var rom(default, null):ROM;
+    public var cartridge(default, null): Cartridge;
 
     public var vram(default, null):VRAM;
     public var eram(default, null):ERAM;
@@ -15,7 +18,6 @@ class Memory {
     public var hram(default, null):HRAM;
 
     public function new() {
-        rom = new ROM();
 
         vram = new VRAM();
 
@@ -25,15 +27,18 @@ class Memory {
 
         oam = new OAM();
 
-
-
         hram = new HRAM();
+    }
+
+    public function linkCartrdige(cartridge:Cartridge) : Void
+    {
+        this.cartridge = cartridge;
     }
 
     public function getValue(address:Int):Int {
         // ROM
         if (address.inRange(0x0000, 0x7FFF)) {
-            return rom.getValue(address);
+            return cartridge.getValue(address);
         }
         // VRAM
         else if (address.inRange(0x8000, 0x9FFF)) {
@@ -43,7 +48,8 @@ class Memory {
         else if (address.inRange(0xA000, 0xBFFF)) {
             // Beware, this part can be changed from the cart side.
             // return external_ram.getValue(address - 0xA000);
-            return 0xFF;
+            //return 0xFF;
+            return cartridge.getValue(address);
         }
         // Work RAM bank 0, always present
         else if (address.inRange(0xC000, 0xCFFF)) {
@@ -91,7 +97,8 @@ class Memory {
     public function setValue(address:Int, value:Int) {
         // ROM
         if(address.inRange(0x0000, 0x7FFF)) {
-            return rom.setValue(address, value);
+            return cartridge.setValue(address, value);
+           // return rom.setValue(address, value);
         }
         // VRAM
         else if(address.inRange(0x8000, 0x9FFF)) {
@@ -99,6 +106,7 @@ class Memory {
         }
         // External RAM
         else if(address.inRange(0xA000, 0xBFFF)) {
+            return cartridge.setValue(address, value);
             // Beware, this part can be changed from the cart side.
             // return external_ram.setValue(address - 0xA000, value);
             return;
