@@ -71,15 +71,24 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
             }
         }
         else if(address.inRange(0xA000,0xBFFF)) {
+            if(!supports_ram) {
+                throw 'attempted to get ram value on unsupported MBC';
+            }
             var num_bank = Std.int(address/RAM_BANK_SIZE);
             return ram_banks[num_bank].get(address % RAM_BANK_SIZE);
         }
+        return 0x0;
     }
 
     public function setValue(address:Int, value:Int) {
         //RAM is READ/WRITE, up to 3 banks
         if(address.inRange(0xA000, 0xBFFF)) {
-            //RAM, should be handled in MBC
+            if(!supports_ram) {
+                throw 'attempted to set ram value on unsupported MBC';
+            }
+
+            var num_bank = Std.int(address/RAM_BANK_SIZE);
+            ram_banks[num_bank].set(address % RAM_BANK_SIZE, value);
         }
          //Magic address space to enable RAM
         else if(address.inRange(0x000, 0x1FFF)) {

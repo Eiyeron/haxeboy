@@ -29,9 +29,11 @@ class Cartridge {
 
         switch(header.CARTRIDGE_TYPE) {
             case CartridgeType.ROM_ONLY:
-                MBC.loadCart(data);
+                MBC = new ROM();
             case CartridgeType.MBC1:
-                MBC = new MBC1();
+                MBC = new MBC1(false);
+            case CartridgeType.MBC1_RAM:
+                MBC = new MBC1(true);
             default:
                 throw 'unsupported cartridge type: ' + StringTools.hex(header.CARTRIDGE_TYPE);
         }
