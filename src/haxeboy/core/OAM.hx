@@ -1,4 +1,4 @@
-package haxeboy;
+package haxeboy.core;
 
 class OAM implements MemoryMappable {
     var sprites:Array<SpriteAttribute>;

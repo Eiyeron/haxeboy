@@ -1,6 +1,6 @@
 package opcodes;
 
-import haxeboy.Gameboy;
+import haxeboy.core.Gameboy;
 
 class OpcodeTest extends haxe.unit.TestCase {
     var gb:Gameboy;

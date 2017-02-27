@@ -1,6 +1,6 @@
 # Build results
 *.n
-build
+build/haxeboy.js
 
 # Please don't include any ROM yet.
 *.gb

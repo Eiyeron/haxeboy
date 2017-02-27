@@ -1,4 +1,4 @@
-package haxeboy;
+package haxeboy.core;
 
 class CPU {
     /// Registers ///
@@ -99,35 +99,35 @@ class CPU {
     }
 
     /// Register getters ///
-    public function get_AF():Int {
+    public inline function get_AF():Int {
         return (A << 8) | F;
     }
 
-    public function get_BC():Int {
+    public inline function get_BC():Int {
         return (B << 8) | C;
     }
 
-    public function get_DE():Int {
+    public inline function get_DE():Int {
         return (D << 8) | E;
     }
 
-    public function get_HL():Int {
+    public inline function get_HL():Int {
         return (H << 8) | L;
     }
 
-    public function get_z():Int {
+    public inline function get_z():Int {
         return (F & (1 << 7)) >> 7;
     }
 
-    public function get_n():Int {
+    public inline function get_n():Int {
         return (F & (1 << 6)) >> 6;
     }
 
-    public function get_h():Int {
+    public inline function get_h():Int {
         return (F & (1 << 5)) >> 5;
     }
 
-    public function get_Cy():Int {
+    public inline function get_Cy():Int {
         return (F & (1 << 4)) >> 4;
     }
 
@@ -377,7 +377,7 @@ class CPU {
                 stop_requested = true;
                 PC += 2;
                 cyclesToBurn = 4;
-            
+
             case 0x11:
                 //ld de, d16
                 //Z- N- H- C-

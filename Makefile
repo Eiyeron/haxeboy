@@ -1,5 +1,5 @@
 
-build/haxeboy.js:
+build/js:
 	@haxe build.hxml
 
 test:

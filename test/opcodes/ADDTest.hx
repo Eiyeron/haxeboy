@@ -1,6 +1,6 @@
 package opcodes;
 
-import haxeboy.ROM;
+import haxeboy.core.ROM;
 import haxe.io.Bytes;
 
 using opcodes.TestTools;
