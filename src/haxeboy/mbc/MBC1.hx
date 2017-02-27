@@ -64,9 +64,11 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
         var ramMode: Bool = false;
         var ramBank: Int = 0;
 
+        //RAM is READ/WRITE, up to 3 banks
         if(address.inRange(0xA000, 0xBFFF)) {
             //RAM, should be handled in MBC
         }
+         //Magic address space to enable RAM
         else if(address.inRange(0x000, 0x1FFF)) {
             if(value & 0xF == 0xA) {
                 //ENABLE RAM
@@ -75,18 +77,21 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
                 //DISABLE RAM
             }
         }
+        //set lower 5 bits of rom bank selection @EIYERON PLEASE CHECK THIS MATH
         else if(address.inRange(0x2000, 0x3FFF)) {
             current_rom_bank = (current_rom_bank & (0x60)) | (value & 0x1F);
-            //USE THIS
         }
         else if(address.inRange(0x4000, 0x5FFF)) {
             if(ramMode) {
+                //set 2 bit ram bank selection
                 ramBank = value & 0x3;
             }
             else {
+                //set upper 2 bits of rom bank selection @EIYERON AGAIN PLEASE CHECK MATH
                 current_rom_bank = ((value & 0x3) << 5) | (current_rom_bank & 0x1F);
             }
         }
+        //swap between ROM bank addressing and RAM bank addressing
         else if(address.inRange(0x6000, 0x7FFF)) {
             if(value == 0x1) {
                 ramMode = true;
