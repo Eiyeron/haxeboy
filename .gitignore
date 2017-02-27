@@ -2,6 +2,9 @@
 *.n
 build
 
+# Please don't include any ROM yet.
+*.gb
+
 # IDE or text editor stuff
 *.vscode
 *.sublime-project
