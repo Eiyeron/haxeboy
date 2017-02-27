@@ -88,7 +88,7 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
             }
         }
         else if(address.inRange(0x6000, 0x7FFF)) {
-            if(address == 1) {
+            if(value == 0x1) {
                 ramMode = true;
             }
             else {
