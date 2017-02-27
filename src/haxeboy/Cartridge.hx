@@ -1,11 +1,14 @@
 package haxeboy;
 
 import haxe.io.Bytes;
+import haxeboy.mbc.*;
 
 using haxeboy.Tools;
 
 class Cartridge {
     var header: HeaderInfo;
+
+    var MBC: MBC;
 
     public function new(data: Bytes) {
         header = {TITLE: ''};
@@ -23,44 +26,24 @@ class Cartridge {
             default:
                 throw 'unknown destination code: ' + StringTools.hex(data.get(HeaderLocation.DESTINATION_CODE));
         }
+
+        switch(header.CARTRIDGE_TYPE) {
+            case CartridgeType.ROM_ONLY:
+                MBC.loadCart(data);
+            case CartridgeType.MBC1:
+                MBC = new MBC1();
+            default:
+                throw 'unsupported cartridge type: ' + StringTools.hex(header.CARTRIDGE_TYPE);
+        }
+        MBC.loadCart(data);
     }
 
     public function setValue(address: Int, value: Int) {
-        var ramMode: Bool = false;
-        var ramBank: Int = 0;
-        var romBank: Int = 0;
+        MBC.setValue(address, value);
+    }
 
-        if(address.inRange(0xA000, 0xBFFF)) {
-            //RAM, should be handled in MBC
-        }
-        else if(address.inRange(0x000, 0x1FFF)) {
-            if(value & 0xF == 0xA) {
-                //ENABLE RAM
-            }
-            else {
-                //DISABLE RAM
-            }
-        }
-        else if(address.inRange(0x2000, 0x3FFF)) {
-            romBank = (romBank & (0x60)) | (value & 0x1F);
-            //USE THIS
-        }
-        else if(address.inRange(0x4000, 0x5FFF)) {
-            if(ramMode) {
-                ramBank = value & 0x3;
-            }
-            else {
-                romBank = ((value & 0x3) << 5) | (romBank & 0x1F);
-            }
-        }
-        else if(address.inRange(0x6000, 0x7FFF)) {
-            if(address == 1) {
-                ramMode = true;
-            }
-            else {
-                ramMode = false;
-            }
-        }
+    public function getValue(address: Int): Int {
+        return MBC.getValue(address);
     }
 }
 

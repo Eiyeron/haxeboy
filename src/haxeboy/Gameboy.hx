@@ -19,7 +19,7 @@ class Gameboy {
        // var cart: Bytes = Bytes.alloc(32*1024);
        // cart.set(0x0147, 0x9);
 
-        insertCart(File.getBytes('main.gb'));
+        //insertCart(File.getBytes('main.gb'));
     }
 
     /// Mockup of eventual API ///
@@ -39,11 +39,11 @@ class Gameboy {
     }
 
     public function insertCart(cartData:Bytes) {
-        memory.rom.loadCart(cartData);
+        //memory.rom.loadCart(cartData);
         new haxeboy.Cartridge(cartData);
     }
 
     public function removeCart() {
-        memory.rom.removeCart();
+        //cartridge.removeCart();
     }
 }

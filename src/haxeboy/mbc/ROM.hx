@@ -5,13 +5,13 @@ import haxe.io.UInt8Array;
 
 using haxeboy.Tools;
 
-class ROM implements MemoryMappable {
+class ROM implements MemoryMappable implements MBC {
     var data: UInt8Array;
     var cart_inserted: Bool = false;
 
     public function new() {}
 
-    public function loadCart(bytes:Bytes) {
+    public function loadCart(bytes: Bytes) {
         data = UInt8Array.fromBytes(bytes);
         cart_inserted = true;
     }
