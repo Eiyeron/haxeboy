@@ -32,7 +32,7 @@ class Cartridge {
                 MBC = new ROM();
             case CartridgeType.MBC1:
                 MBC = new MBC1(false);
-            case CartridgeType.MBC1_RAM:
+            case CartridgeType.MBC1_RAM | CartridgeType.MBC1_RAM_BATTERY:
                 MBC = new MBC1(true);
             default:
                 throw 'unsupported cartridge type: ' + StringTools.hex(header.CARTRIDGE_TYPE);
