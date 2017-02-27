@@ -6,6 +6,7 @@ import haxe.io.UInt8Array;
 using haxeboy.Tools;
 
 class ROM implements MemoryMappable implements MBC {
+    public static inline var ROM_BANK_SIZE:Int = 16 * 1024; // 16 kB
     var data: UInt8Array;
     var cart_inserted: Bool = false;
 
@@ -36,6 +37,7 @@ class ROM implements MemoryMappable implements MBC {
     }
 
     public function setValue(address:Int, value:Int) {
-        throw 'ROM_ONLY cartridges do not support writing';
+        // TODO : switch for unit test library that include exceptions
+        // throw 'ROM_ONLY cartridges do not support writing';
     }
 }

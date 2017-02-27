@@ -70,57 +70,61 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
                 return banks[current_rom_bank].get(address % ROM_BANK_SIZE);
             }
         }
-        else if(address.inRange(0xA000,0xBFFF)) {
-            if(!supports_ram) {
-                throw 'attempted to get ram value on unsupported MBC';
+            else if(address.inRange(0xA000,0xBFFF)) {
+                if(!supports_ram) {
+                    throw 'attempted to get ram value on unsupported MBC';
+                }
+                var num_bank = Std.int((address - 0xA000)/RAM_BANK_SIZE);
+                return ram_banks[num_bank].get((address - 0xA000) % RAM_BANK_SIZE);
             }
-            var num_bank = Std.int(address/RAM_BANK_SIZE);
-            return ram_banks[num_bank].get(address % RAM_BANK_SIZE);
-        }
         return 0x0;
     }
 
+    // Note : the ROM banks index uses 7 bits, so can go up to 127.
+    // The ROM banks only go up to 3, so the lowest 2 bits are used.
     public function setValue(address:Int, value:Int) {
-        //RAM is READ/WRITE, up to 3 banks
+        // RAM is READ/WRITE, up to 3 banks
         if(address.inRange(0xA000, 0xBFFF)) {
             if(!supports_ram) {
                 throw 'attempted to set ram value on unsupported MBC';
             }
 
-            var num_bank = Std.int(address/RAM_BANK_SIZE);
-            ram_banks[num_bank].set(address % RAM_BANK_SIZE, value);
+            var num_bank = Std.int((address - 0xA000)/RAM_BANK_SIZE);
+            ram_banks[num_bank].set((address - 0xA000) % RAM_BANK_SIZE, value);
         }
-         //Magic address space to enable RAM
+         // Magic address space to enable RAM
         else if(address.inRange(0x000, 0x1FFF)) {
-            if(value & 0xF == 0xA) {
-                //ENABLE RAM
+            if((value & 0x0F) == 0x0A) {
+                // TODO : Enable RAM
             }
             else {
-                //DISABLE RAM
+                // TODO : Disable RAM
             }
         }
-        //set lower 5 bits of rom bank selection @EIYERON PLEASE CHECK THIS MATH
+        // Set lower 5 bits of ROM bank selection
+        // Note: 0x60 because the highest bit isn't used.
+        // The maximum number of banks is 127, not 255.
         else if(address.inRange(0x2000, 0x3FFF)) {
             current_rom_bank = (current_rom_bank & (0x60)) | (value & 0x1F);
         }
         else if(address.inRange(0x4000, 0x5FFF)) {
             if(ram_mode) {
-                //set 2 bit ram bank selection
-                current_ram_bank = value & 0x3;
+                // Set the current ram bank (as there can only be 3 banks,
+                // let's only take the two lowest bits.)
+                current_ram_bank = (value & 0x03);
             }
             else {
-                //set upper 2 bits of rom bank selection @EIYERON AGAIN PLEASE CHECK MATH
-                current_rom_bank = ((value & 0x3) << 5) | (current_rom_bank & 0x1F);
+                // Set the two highest bit in the current rom bank index.
+                // Note : again, the rom bank number limit is 127.
+                current_rom_bank = ((value & 0x03) << 5) | (current_rom_bank & 0x1F);
             }
         }
-        //swap between ROM bank addressing and RAM bank addressing
+        // Swap between ROM bank addressing and RAM bank addressing for further
+        // bank switchings.
         else if(address.inRange(0x6000, 0x7FFF)) {
-            if(value == 0x1) {
-                ram_mode = true;
-            }
-            else {
-                ram_mode = false;
-            }
+            // If the logic doesn't involve anything else, it's better to keep
+            // it onelined.
+            ram_mode = (value == 0x01);
         }
     }
 

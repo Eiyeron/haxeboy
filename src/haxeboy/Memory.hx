@@ -18,9 +18,6 @@ class Memory {
     public var hram(default, null):HRAM;
 
     public function new() {
-        //rom = new ROM();
-
-        cartridge = new Cartridge(null);
 
         vram = new VRAM();
 
@@ -30,9 +27,12 @@ class Memory {
 
         oam = new OAM();
 
-
-
         hram = new HRAM();
+    }
+
+    public function linkCartrdige(cartridge:Cartridge) : Void
+    {
+        this.cartridge = cartridge;
     }
 
     public function getValue(address:Int):Int {
