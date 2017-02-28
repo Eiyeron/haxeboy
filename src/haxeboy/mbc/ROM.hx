@@ -49,10 +49,10 @@ class ROM implements MemoryMappable implements MBC {
     }
 
     public function setValue(address:Int, value:Int) {
-        if(!supports_ram) {
-            throw 'attempted RAM access on unsupported hardware';
-        }
         if (address.inRange(0xA000, 0xBFFF)) {
+            if(!supports_ram) {
+                throw 'attempted RAM access on unsupported hardware';
+            }
             ram.set(address - 0xA000, value);
         }
     }
