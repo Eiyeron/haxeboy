@@ -29,7 +29,9 @@ class Cartridge {
 
         switch(header.cartridge_type) {
             case CartridgeType.ROM_ONLY:
-                MBC = new ROM();
+                MBC = new ROM(false);
+            case CartridgeType.ROM_RAM | CartridgeType.ROM_RAM_BATTERY:
+                MBC = new ROM(true);
             case CartridgeType.MBC1:
                 MBC = new MBC1(false);
             case CartridgeType.MBC1_RAM | CartridgeType.MBC1_RAM_BATTERY:
