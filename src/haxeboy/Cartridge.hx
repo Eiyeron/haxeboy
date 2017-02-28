@@ -12,7 +12,7 @@ class Cartridge {
 
     public function new(data:Bytes, headerless:Bool = false) {
         if(!headerless) {
-            header = {title: ''};
+            header = {title: '', headerless:headerless};
             for(i in 0...16) {
                 header.title += String.fromCharCode(data.get(HeaderLocation.TITLE+i));
             }
@@ -41,6 +41,9 @@ class Cartridge {
                     throw 'unsupported cartridge type: ' + StringTools.hex(header.cartridge_type);
             }
         }
+        else {
+            header = {headerless: headerless};
+        }
         MBC.loadCart(data);
     }
 
@@ -54,6 +57,8 @@ class Cartridge {
 }
 
 typedef HeaderInfo = {
+    ?headerless:Bool,
+    //
     ?title: String,
     ?manufacturer_code: String,
     ?cgb_flag: Bool,

@@ -38,9 +38,9 @@ class Gameboy {
         // memory.reset();
     }
 
-    public function insertCart(cartData:Bytes) {
+    public function insertCart(cartData:Bytes, headerless:Bool = false) {
         //memory.rom.loadCart(cartData);
-        cartridge = new haxeboy.Cartridge(cartData);
+        cartridge = new haxeboy.Cartridge(cartData, headerless);
         memory.linkCartrdige(cartridge);
     }
 
