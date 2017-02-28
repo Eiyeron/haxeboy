@@ -84,7 +84,7 @@ class MBC1 implements MemoryMappable implements MemoryBankBased implements MBC {
     }
 
     // Note : the ROM banks index uses 7 bits, so can go up to 127.
-    // The ROM banks only go up to 3, so the lowest 2 bits are used.
+    // The RAM banks only go up to 3, so the lowest 2 bits are used.
     public function setValue(address:Int, value:Int) {
         // RAM is READ/WRITE, up to 3 banks
         if(address.inRange(0xA000, 0xBFFF)) {
