@@ -9,11 +9,6 @@ using opcodes.TestTools;
 
 class ADDTest extends OpcodeTest {
 
-    @Before
-    override public function setup() {
-        gb = new Gameboy();
-    }
-
     @Test
     function test_ADD_HL_BC() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
