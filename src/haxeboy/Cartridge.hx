@@ -43,6 +43,7 @@ class Cartridge {
         }
         else {
             header = {headerless: headerless};
+            MBC = new ROM(false);
         }
         MBC.loadCart(data);
     }
