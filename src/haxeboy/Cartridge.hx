@@ -10,34 +10,36 @@ class Cartridge {
 
     var MBC: MBC;
 
-    public function new(data: Bytes) {
-        header = {title: ''};
-        for(i in 0...16) {
-            header.title += String.fromCharCode(data.get(HeaderLocation.TITLE+i));
-        }
-        header.cartridge_type = data.get(HeaderLocation.CARTRIDGE_TYPE);
-        header.rom_size = data.get(HeaderLocation.ROM_SIZE);
-        header.ram_size = data.get(HeaderLocation.RAM_SIZE);
-        header.japanese = switch(data.get(HeaderLocation.DESTINATION_CODE)) {
-            case 0x0:
-                true;
-            case 0x01:
-                false;
-            default:
-                throw 'unknown destination code: ' + StringTools.hex(data.get(HeaderLocation.DESTINATION_CODE));
-        }
+    public function new(data:Bytes, headerless:Bool = false) {
+        if(!headerless) {
+            header = {title: ''};
+            for(i in 0...16) {
+                header.title += String.fromCharCode(data.get(HeaderLocation.TITLE+i));
+            }
+            header.cartridge_type = data.get(HeaderLocation.CARTRIDGE_TYPE);
+            header.rom_size = data.get(HeaderLocation.ROM_SIZE);
+            header.ram_size = data.get(HeaderLocation.RAM_SIZE);
+            header.japanese = switch(data.get(HeaderLocation.DESTINATION_CODE)) {
+                case 0x0:
+                    true;
+                case 0x01:
+                    false;
+                default:
+                    throw 'unknown destination code: ' + StringTools.hex(data.get(HeaderLocation.DESTINATION_CODE));
+            }
 
-        switch(header.cartridge_type) {
-            case CartridgeType.ROM_ONLY:
-                MBC = new ROM(false);
-            case CartridgeType.ROM_RAM | CartridgeType.ROM_RAM_BATTERY:
-                MBC = new ROM(true);
-            case CartridgeType.MBC1:
-                MBC = new MBC1(false);
-            case CartridgeType.MBC1_RAM | CartridgeType.MBC1_RAM_BATTERY:
-                MBC = new MBC1(true);
-            default:
-                throw 'unsupported cartridge type: ' + StringTools.hex(header.cartridge_type);
+            switch(header.cartridge_type) {
+                case CartridgeType.ROM_ONLY:
+                    MBC = new ROM(false);
+                case CartridgeType.ROM_RAM | CartridgeType.ROM_RAM_BATTERY:
+                    MBC = new ROM(true);
+                case CartridgeType.MBC1:
+                    MBC = new MBC1(false);
+                case CartridgeType.MBC1_RAM | CartridgeType.MBC1_RAM_BATTERY:
+                    MBC = new MBC1(true);
+                default:
+                    throw 'unsupported cartridge type: ' + StringTools.hex(header.cartridge_type);
+            }
         }
         MBC.loadCart(data);
     }
