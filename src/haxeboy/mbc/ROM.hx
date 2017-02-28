@@ -32,10 +32,6 @@ class ROM implements MemoryMappable implements MBC {
     }
 
     public function getValue(address:Int):Int {
-        if(!cart_inserted) {
-            return 0;
-        }
-
         if(address.inRange(0x0, 0x7FFF)) {
             return data[address];
         }

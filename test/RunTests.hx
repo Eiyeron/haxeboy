@@ -1,6 +1,7 @@
 package;
 
 import opcodes.*;
+import mbc.*;
 
 class RunTests extends haxe.unit.TestCase {
 
@@ -13,6 +14,8 @@ class RunTests extends haxe.unit.TestCase {
         r.add(new RLCTest());
         r.add(new ADDTest());
         r.add(new RRCTest());
+
+        r.add(new ROMTest());
         r.run();
       }
 }
