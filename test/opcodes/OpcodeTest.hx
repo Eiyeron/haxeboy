@@ -2,10 +2,11 @@ package opcodes;
 
 import haxeboy.core.Gameboy;
 
-class OpcodeTest extends haxe.unit.TestCase {
+class OpcodeTest {
     var gb:Gameboy;
 
-    override public function setup() {
+    @Before
+    public function setup() {
         gb = new Gameboy();
     }
 
