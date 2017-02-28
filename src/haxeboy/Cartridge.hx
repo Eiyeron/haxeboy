@@ -11,14 +11,14 @@ class Cartridge {
     var MBC: MBC;
 
     public function new(data: Bytes) {
-        header = {TITLE: ''};
+        header = {title: ''};
         for(i in 0...16) {
-            header.TITLE += String.fromCharCode(data.get(HeaderLocation.TITLE+i));
+            header.title += String.fromCharCode(data.get(HeaderLocation.TITLE+i));
         }
-        header.CARTRIDGE_TYPE = data.get(HeaderLocation.CARTRIDGE_TYPE);
-        header.ROM_SIZE = data.get(HeaderLocation.ROM_SIZE);
-        header.RAM_SIZE = data.get(HeaderLocation.RAM_SIZE);
-        header.JAPANESE = switch(data.get(HeaderLocation.DESTINATION_CODE)) {
+        header.cartridge_type = data.get(HeaderLocation.CARTRIDGE_TYPE);
+        header.rom_size = data.get(HeaderLocation.ROM_SIZE);
+        header.ram_size = data.get(HeaderLocation.RAM_SIZE);
+        header.japanese = switch(data.get(HeaderLocation.DESTINATION_CODE)) {
             case 0x0:
                 true;
             case 0x01:
@@ -27,7 +27,7 @@ class Cartridge {
                 throw 'unknown destination code: ' + StringTools.hex(data.get(HeaderLocation.DESTINATION_CODE));
         }
 
-        switch(header.CARTRIDGE_TYPE) {
+        switch(header.cartridge_type) {
             case CartridgeType.ROM_ONLY:
                 MBC = new ROM();
             case CartridgeType.MBC1:
@@ -35,7 +35,7 @@ class Cartridge {
             case CartridgeType.MBC1_RAM | CartridgeType.MBC1_RAM_BATTERY:
                 MBC = new MBC1(true);
             default:
-                throw 'unsupported cartridge type: ' + StringTools.hex(header.CARTRIDGE_TYPE);
+                throw 'unsupported cartridge type: ' + StringTools.hex(header.cartridge_type);
         }
         MBC.loadCart(data);
     }
@@ -50,13 +50,13 @@ class Cartridge {
 }
 
 typedef HeaderInfo = {
-    ?TITLE: String,
-    ?MANUFACTURER_CODE: String,
-    ?CGB_FLAG: Bool,
-    ?CARTRIDGE_TYPE: CartridgeType,
-    ?ROM_SIZE: Int,
-    ?RAM_SIZE: Int,
-    ?JAPANESE: Bool
+    ?title: String,
+    ?manufacturer_code: String,
+    ?cgb_flag: Bool,
+    ?cartridge_type: CartridgeType,
+    ?rom_size: Int,
+    ?ram_size: Int,
+    ?japanese: Bool
 }
 
 @:enum
