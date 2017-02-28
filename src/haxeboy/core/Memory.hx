@@ -9,7 +9,6 @@ class Memory {
     public var cartridge(default, null):Cartridge;
 
 	public var vram(default, null):VRAM;
-	public var eram(default, null):ERAM;
 	public var wram(default, null):WRAM;
 	public var oam(default, null):OAM;
 	public var iop(default, null):IOP;
@@ -19,8 +18,6 @@ class Memory {
 	public function new():Void {
 
 		vram = new VRAM();
-
-		eram = new ERAM();
 
 		wram = new WRAM();
 
