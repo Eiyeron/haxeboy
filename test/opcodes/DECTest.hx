@@ -2,11 +2,13 @@ package opcodes;
 
 import haxeboy.mbc.ROM;
 import haxe.io.Bytes;
+import massive.munit.Assert;
 
 using opcodes.TestTools;
 
 class DECTest extends OpcodeTest {
-    function test_DEC_B_normal() {
+        @Test
+        function test_DEC_B_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x05, STOP]);
         gb.insertCart(routine);
@@ -15,16 +17,17 @@ class DECTest extends OpcodeTest {
         gb.run();
 
         // Registers and timing check
-        assertEquals(0x01, gb.cpu.B);
-        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
+        Assert.areEqual(0x01, gb.cpu.B);
+        Assert.areEqual(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
+        Assert.areEqual(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
-        assertEquals(0, gb.cpu.z); // It's not going to 0
-        assertEquals(1, gb.cpu.n); // Should be one
-        assertEquals(0, gb.cpu.h); // Not overflowing
+        Assert.areEqual(0, gb.cpu.z); // It's not going to 0
+        Assert.areEqual(1, gb.cpu.n); // Should be one
+        Assert.areEqual(0, gb.cpu.h); // Not overflowing
     }
 
-    function test_DEC_B_underflow() {
+        @Test
+        function test_DEC_B_underflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x05, STOP]);
         gb.insertCart(routine);
@@ -33,16 +36,17 @@ class DECTest extends OpcodeTest {
         gb.run();
 
         // Registers and timing check
-        assertEquals(0xFF, gb.cpu.B);
-        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
+        Assert.areEqual(0xFF, gb.cpu.B);
+        Assert.areEqual(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
+        Assert.areEqual(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
-        assertEquals(1, gb.cpu.z); // Underflowing
-        assertEquals(1, gb.cpu.n); // Should be one
-        assertEquals(1, gb.cpu.h); // Half carry should be set
+        Assert.areEqual(1, gb.cpu.z); // Underflowing
+        Assert.areEqual(1, gb.cpu.n); // Should be one
+        Assert.areEqual(1, gb.cpu.h); // Half carry should be set
     }
 
-    function test_DEC_B_halfcarry() {
+        @Test
+        function test_DEC_B_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x05, STOP]);
         gb.insertCart(routine);
@@ -51,16 +55,17 @@ class DECTest extends OpcodeTest {
         gb.run();
 
         // Registers and timing check
-        assertEquals(0x0F, gb.cpu.B);
-        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
+        Assert.areEqual(0x0F, gb.cpu.B);
+        Assert.areEqual(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
+        Assert.areEqual(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
-        assertEquals(0, gb.cpu.z); // Should not going to zero
-        assertEquals(1, gb.cpu.n); // Should be one
-        assertEquals(1, gb.cpu.h); // Half carry should be set
+        Assert.areEqual(0, gb.cpu.z); // Should not going to zero
+        Assert.areEqual(1, gb.cpu.n); // Should be one
+        Assert.areEqual(1, gb.cpu.h); // Half carry should be set
     }
 
-    function test_DEC_BC_normal() {
+        @Test
+        function test_DEC_BC_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0B, STOP]);
         gb.insertCart(routine);
@@ -69,12 +74,13 @@ class DECTest extends OpcodeTest {
         gb.run();
 
         // Registers and timing check
-        assertEquals(0x01, gb.cpu.BC);
-        assertEquals(12, gb.cpu.cycles); // 8 for DEC BC, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
+        Assert.areEqual(0x01, gb.cpu.BC);
+        Assert.areEqual(12, gb.cpu.cycles); // 8 for DEC BC, 4 for STOP
+        Assert.areEqual(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
     }
 
-    function test_DEC_C_normal() {
+        @Test
+        function test_DEC_C_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0D, STOP]);
         gb.insertCart(routine);
@@ -83,16 +89,17 @@ class DECTest extends OpcodeTest {
         gb.run();
 
         // Registers and timing check
-        assertEquals(0x01, gb.cpu.C);
-        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
+        Assert.areEqual(0x01, gb.cpu.C);
+        Assert.areEqual(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
+        Assert.areEqual(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
-        assertEquals(0, gb.cpu.z); // It's not going to 0
-        assertEquals(1, gb.cpu.n); // Should be one
-        assertEquals(0, gb.cpu.h); // Not overflowing
+        Assert.areEqual(0, gb.cpu.z); // It's not going to 0
+        Assert.areEqual(1, gb.cpu.n); // Should be one
+        Assert.areEqual(0, gb.cpu.h); // Not overflowing
     }
 
-    function test_DEC_C_underflow() {
+        @Test
+        function test_DEC_C_underflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0D, STOP]);
         gb.insertCart(routine);
@@ -101,16 +108,17 @@ class DECTest extends OpcodeTest {
         gb.run();
 
         // Registers and timing check
-        assertEquals(0xFF, gb.cpu.C);
-        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
+        Assert.areEqual(0xFF, gb.cpu.C);
+        Assert.areEqual(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
+        Assert.areEqual(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
-        assertEquals(1, gb.cpu.z); // Underflowing
-        assertEquals(1, gb.cpu.n); // Should be one
-        assertEquals(1, gb.cpu.h); // Half carry should be set
+        Assert.areEqual(1, gb.cpu.z); // Underflowing
+        Assert.areEqual(1, gb.cpu.n); // Should be one
+        Assert.areEqual(1, gb.cpu.h); // Half carry should be set
     }
 
-    function test_DEC_C_halfcarry() {
+        @Test
+        function test_DEC_C_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0D, STOP]);
         gb.insertCart(routine);
@@ -119,12 +127,12 @@ class DECTest extends OpcodeTest {
         gb.run();
 
         // Registers and timing check
-        assertEquals(0x0F, gb.cpu.C);
-        assertEquals(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
-        assertEquals(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
+        Assert.areEqual(0x0F, gb.cpu.C);
+        Assert.areEqual(8, gb.cpu.cycles); // 4 for DEC B, 4 for STOP
+        Assert.areEqual(0x0003, gb.cpu.PC); // 1 + DEC, 2 for STOP
         // Flag check
-        assertEquals(0, gb.cpu.z); // Should not going to zero
-        assertEquals(1, gb.cpu.n); // Should be one
-        assertEquals(1, gb.cpu.h); // Half carry should be set
+        Assert.areEqual(0, gb.cpu.z); // Should not going to zero
+        Assert.areEqual(1, gb.cpu.n); // Should be one
+        Assert.areEqual(1, gb.cpu.h); // Half carry should be set
     }
 }
