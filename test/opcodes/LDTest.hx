@@ -11,7 +11,7 @@ class LDTest extends OpcodeTest {
     function test_LD_BC_nn() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x01, 0xDE, 0xAD, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.run();
 
@@ -25,7 +25,7 @@ class LDTest extends OpcodeTest {
     function test_LD_BC_A_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x02, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.BC = 0xC000;
         gb.cpu.A = 0x42;
@@ -44,7 +44,7 @@ class LDTest extends OpcodeTest {
     function test_LD_BC_A_fail() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x02, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.BC = 0x0000;
         gb.cpu.A = 0x42;
@@ -62,7 +62,7 @@ class LDTest extends OpcodeTest {
     function test_LD_B_d8() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x06, 0x42, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.run();
 
@@ -76,7 +76,7 @@ class LDTest extends OpcodeTest {
     function test_LD_SP_nn() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x08, 0xDE, 0xAD, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.run();
 
@@ -90,7 +90,7 @@ class LDTest extends OpcodeTest {
     function test_LD_A_BC() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0A, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.BC = 0xC000;
         gb.memory.setValue(0xC000, 0x42);
@@ -107,7 +107,7 @@ class LDTest extends OpcodeTest {
     function test_LD_C_d8() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0E, 0x42, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.run();
 

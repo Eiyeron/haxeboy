@@ -11,7 +11,7 @@ class DECTest extends OpcodeTest {
         function test_DEC_B_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x05, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.B = 0x02;
         gb.run();
@@ -30,7 +30,7 @@ class DECTest extends OpcodeTest {
         function test_DEC_B_underflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x05, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.B = 0x00;
         gb.run();
@@ -49,7 +49,7 @@ class DECTest extends OpcodeTest {
         function test_DEC_B_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x05, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.B = 0x10;
         gb.run();
@@ -68,7 +68,7 @@ class DECTest extends OpcodeTest {
         function test_DEC_BC_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0B, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.BC = 0x02;
         gb.run();
@@ -83,7 +83,7 @@ class DECTest extends OpcodeTest {
         function test_DEC_C_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0D, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.C = 0x02;
         gb.run();
@@ -102,7 +102,7 @@ class DECTest extends OpcodeTest {
         function test_DEC_C_underflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0D, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.C = 0x00;
         gb.run();
@@ -121,7 +121,7 @@ class DECTest extends OpcodeTest {
         function test_DEC_C_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0D, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.C = 0x10;
         gb.run();

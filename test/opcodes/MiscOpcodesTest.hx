@@ -12,7 +12,7 @@ class MiscOpcodesTest extends OpcodeTest {
     public function test_STOP() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([STOP, 0x00]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
         gb.run();
         // Registers and timing check
         Assert.areEqual(4, gb.cpu.cycles); //  4 for STOP

@@ -11,7 +11,7 @@ class INCTest extends OpcodeTest {
     function test_INC_BC() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x03, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.run();
 
@@ -25,7 +25,7 @@ class INCTest extends OpcodeTest {
     function test_INC_B_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x04, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.run();
 
@@ -43,7 +43,7 @@ class INCTest extends OpcodeTest {
     function test_INC_B_overflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x04, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.B =0xFF;
         gb.run();
@@ -62,7 +62,7 @@ class INCTest extends OpcodeTest {
     function test_INC_B_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x04, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.B = 0x0F;
         gb.run();
@@ -81,7 +81,7 @@ class INCTest extends OpcodeTest {
     function test_INC_C_normal() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0C, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.run();
 
@@ -99,7 +99,7 @@ class INCTest extends OpcodeTest {
     function test_INC_C_overflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0C, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.C =0xFF;
         gb.run();
@@ -118,7 +118,7 @@ class INCTest extends OpcodeTest {
     function test_INC_C_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0C, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.C = 0x0F;
         gb.run();

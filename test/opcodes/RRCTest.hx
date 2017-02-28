@@ -11,7 +11,7 @@ class RRCTest extends OpcodeTest {
     public function test_RRCA_nocarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0F, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.A = 0x02;
 
@@ -31,7 +31,7 @@ class RRCTest extends OpcodeTest {
     public function test_RRCA_carry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x0F, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.A = 0x01;
 

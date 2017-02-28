@@ -13,7 +13,7 @@ class ADDTest extends OpcodeTest {
     function test_ADD_HL_BC() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x09, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.HL = 0xDE00;
         gb.cpu.BC = 0x00AD;
@@ -35,7 +35,7 @@ class ADDTest extends OpcodeTest {
     function test_ADD_HL_BC_halfcarry() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x09, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.HL = 0x0F00;
         gb.cpu.BC = 0x0100;
@@ -57,7 +57,7 @@ class ADDTest extends OpcodeTest {
     function test_ADD_HL_BC_overflow() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([0x09, STOP]);
-        gb.insertCart(routine);
+        gb.insertCart(routine, true);
 
         gb.cpu.HL = 0xF000;
         gb.cpu.BC = 0x1000;
