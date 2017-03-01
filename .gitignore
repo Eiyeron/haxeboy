@@ -2,6 +2,9 @@
 *.n
 build
 
+#Munit
+report
+
 # Please don't include any ROM yet.
 *.gb
 
