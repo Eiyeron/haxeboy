@@ -81,8 +81,6 @@ class CPU {
         if(halted)
             return;
 
-        trace(PC);
-
         var interrupts: Int = memory.getValue(0xFF0F);
         if(interrupts != 0) {
             if(interrupts & InterruptFlag.V_BLANK != 0) {

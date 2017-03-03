@@ -14,7 +14,7 @@ class CALLTest extends OpcodeTest {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([
             0xCD, 0x0, 0x5,
-            0x05,
+            0x03,
             STOP,
             0x03,
             0x03,
@@ -24,6 +24,6 @@ class CALLTest extends OpcodeTest {
 
         gb.run();
 
-        Assert.areEqual(0x0001, gb.cpu.BC);
+        Assert.areEqual(0x0003, gb.cpu.BC);
     }
 }
