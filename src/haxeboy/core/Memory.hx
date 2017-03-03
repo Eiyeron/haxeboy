@@ -71,7 +71,8 @@ class Memory {
         }
         // IO ports
         else if (address.inRange(0xFF00,0xFF7F)) {
-            return iop.getValue(address - 0xFF00);
+            //return iop.getValue(address - 0xFF00);
+            return 0;
         }
         // HRAM (High RAM)
         else if (address.inRange(0xFF80, 0xFFFE)) {

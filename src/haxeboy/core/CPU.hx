@@ -79,6 +79,31 @@ class CPU {
         if(halted)
             return;
 
+        var interrupts: Int = memory.getValue(0xFF0F);
+        if(interrupts != 0) {
+            if(interrupts & InterruptFlag.V_BLANK != 0) {
+                interrupts &= ~InterruptFlag.V_BLANK;
+                call(Interrupt.V_BLANK);
+            }
+            if(interrupts & InterruptFlag.LCD_STAT != 0) {
+                interrupts &= ~InterruptFlag.LCD_STAT;
+                call(Interrupt.LCD_STAT);
+
+            }
+            if(interrupts & InterruptFlag.TIMER != 0) {
+                interrupts &= ~InterruptFlag.TIMER;
+                call(Interrupt.TIMER);
+            }
+            if(interrupts & InterruptFlag.SERIAL != 0) {
+                interrupts &= ~InterruptFlag.SERIAL;
+                call(Interrupt.SERIAL);
+            }
+            if(interrupts & InterruptFlag.JOYPAD != 0) {
+                interrupts &= ~InterruptFlag.JOYPAD;
+                call(Interrupt.JOYPAD);    
+            }
+        }
+
         var opcode:Int = memory.getValue(PC);
 
         if (cyclesToBurn > 0) {
@@ -99,6 +124,10 @@ class CPU {
 
         cyclesToBurn--;
         cycles++;
+    }
+
+    function call(address: Int) {
+        //TODO: DO SOMETHING
     }
 
     /// Register getters ///
