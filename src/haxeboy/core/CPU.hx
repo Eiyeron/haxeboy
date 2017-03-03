@@ -1,5 +1,7 @@
 package haxeboy.core;
 
+using StringTools;
+
 class CPU {
     /// Registers ///
 
@@ -63,7 +65,7 @@ class CPU {
         BC = 0;
         DE = 0;
         HL = 0;
-        SP = 0;
+        SP = 0xFFFE;
         PC = 0;
         cycles = 0;
         cyclesToBurn = 0;
@@ -79,28 +81,30 @@ class CPU {
         if(halted)
             return;
 
+        trace(PC);
+
         var interrupts: Int = memory.getValue(0xFF0F);
         if(interrupts != 0) {
             if(interrupts & InterruptFlag.V_BLANK != 0) {
                 interrupts &= ~InterruptFlag.V_BLANK;
-                call(Interrupt.V_BLANK);
+                op_call(Interrupt.V_BLANK);
             }
             if(interrupts & InterruptFlag.LCD_STAT != 0) {
                 interrupts &= ~InterruptFlag.LCD_STAT;
-                call(Interrupt.LCD_STAT);
+                op_call(Interrupt.LCD_STAT);
 
             }
             if(interrupts & InterruptFlag.TIMER != 0) {
                 interrupts &= ~InterruptFlag.TIMER;
-                call(Interrupt.TIMER);
+                op_call(Interrupt.TIMER);
             }
             if(interrupts & InterruptFlag.SERIAL != 0) {
                 interrupts &= ~InterruptFlag.SERIAL;
-                call(Interrupt.SERIAL);
+                op_call(Interrupt.SERIAL);
             }
             if(interrupts & InterruptFlag.JOYPAD != 0) {
                 interrupts &= ~InterruptFlag.JOYPAD;
-                call(Interrupt.JOYPAD);    
+                op_call(Interrupt.JOYPAD);    
             }
         }
 
@@ -126,8 +130,16 @@ class CPU {
         cycles++;
     }
 
-    function call(address: Int) {
-        //TODO: DO SOMETHING
+    function op_call(address: Int) {
+        SP -= 2;
+        memory.setValue16(SP, PC);
+        PC = address;
+    }
+
+    function op_ret() {
+        PC = memory.getValue16(SP);
+        trace(PC);
+        SP += 2;
     }
 
     /// Register getters ///
@@ -422,6 +434,20 @@ class CPU {
                 halt_requested = true;
                 PC += 1;
                 cyclesToBurn = 4;
+
+            case 0xC9:
+                //ret
+                //Z- N- H- C-
+                cyclesToBurn = 16;
+                PC++;
+                op_ret();
+
+            case 0xCD:
+                //call a16
+                //Z- N- H- C-
+                cyclesToBurn = 24;
+                PC++;
+                op_call(take16BitValue());
 
             case 0xF3:
                 //di

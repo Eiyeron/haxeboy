@@ -9,12 +9,16 @@ class Gameboy {
 
     public var turned_on(default, null):Bool;
 
-    public function new()
+    var limit: Int;
+
+    public function new(?stepLimit: Int = 0)
     {
         cpu = new CPU();
         memory = new Memory();
         cpu.memory = memory;
         turned_on = false;
+
+        limit = stepLimit;
 
        // var cart: Bytes = Bytes.alloc(32*1024);
        // cart.set(0x0147, 0x9);
@@ -28,8 +32,13 @@ class Gameboy {
     public function run() {
         turned_on = true;
 
+        var steps = 0;
         while(turned_on && !cpu.stopped) {
             cpu.step();
+            steps++;
+            if(limit != 0 && steps>limit) {
+                throw 'stepped over limit';
+            }
         }
     }
 

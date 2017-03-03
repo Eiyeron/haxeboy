@@ -3,6 +3,8 @@ package haxeboy.core;
 import haxeboy.Cartridge;
 using haxeboy.core.Tools;
 
+using StringTools;
+
 class Memory {
 
 /* === Instance Fields === */
@@ -24,6 +26,8 @@ class Memory {
 		oam = new OAM();
 
 		hram = new HRAM();
+
+        iop = new IOP();
 	}
 
 /* === Instance Methods === */
@@ -71,7 +75,7 @@ class Memory {
         }
         // IO ports
         else if (address.inRange(0xFF00,0xFF7F)) {
-            //return iop.getValue(address - 0xFF00);
+            return iop.getValue(address - 0xFF00);
             return 0;
         }
         // HRAM (High RAM)
@@ -132,8 +136,7 @@ class Memory {
         }
         // IO ports
         else if(address.inRange(0xFF00, 0xFF7F)) {
-            // return iop.setValue(address - 0xFF00, value);
-            return;
+            return iop.setValue(address - 0xFF00, value);
         }
         // HRAM (High RAM)
         else if(address.inRange(0xFF80, 0xFFFE)) {
@@ -148,6 +151,11 @@ class Memory {
             // throw MemoryAccesException('Out of Bounds');
             return ;
         }
+    }
+
+    public inline function setValue16(address:Int, value: Int) {
+        setValue(address, value >> 8);
+        setValue(address + 1, value & 0xFF);
     }
 
 	public inline function getValue16(address:Int) {

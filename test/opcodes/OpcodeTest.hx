@@ -7,7 +7,7 @@ class OpcodeTest {
 
     @Before
     public function setup() {
-        gb = new Gameboy();
+        gb = new Gameboy(1000);
     }
 
 }

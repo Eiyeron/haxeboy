@@ -1,14 +1,19 @@
-package haxeboy;
+package haxeboy.core;
+
+import haxe.io.Bytes;
+import haxe.io.UInt8Array;
 
 using haxeboy.core.Tools;
-
 import haxeboy.core.MemoryMappable;
 import haxeboy.io.Joypad;
 import haxeboy.io.Serial;
 import haxeboy.io.Timer;
 import haxeboy.io.Palette;
 
+
 class IOP implements MemoryMappable {
+
+    var data: UInt8Array;
 
     var joypad:Joypad;
 
@@ -41,6 +46,7 @@ class IOP implements MemoryMappable {
         joypad = new Joypad();
         serial_port = new Serial();
         timer = new Timer();
+        data = new UInt8Array(0x7F);
         // TODO : assign the other registers default values
     }
 
@@ -81,11 +87,12 @@ class IOP implements MemoryMappable {
 
             // TODO: determine what to do when accessing non mapped addresses.
             default:
-                return 0x00;
+                return data.get(address);
         }
     }
 
     public function setValue(address:Int, value:Int) {
+        trace(address);
             if (address == 0x00)
                 return joypad.setValue(address, value);
             else if(address.inRange(0x01, 0x02)) {
@@ -122,6 +129,8 @@ class IOP implements MemoryMappable {
 
             // TODO: determine what to do when accessing non mapped addresses.
             default:
+                trace(data.get(address));
+                data.set(address, value);
         }
     }
 }
