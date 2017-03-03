@@ -37,6 +37,9 @@ class CPU {
     // Program Counter
     public var PC:Int;
 
+    // Interruupt Master Enable Flag
+    public var IME:Int;
+
     // Stop status
     private var stop_requested:Bool;
     public var stopped:Bool;
@@ -389,6 +392,20 @@ class CPU {
                 // halt
                 halt_requested = true;
                 PC += 1;
+                cyclesToBurn = 4;
+
+            case 0xF3:
+                //di
+                //Z- N- H- C-
+                IME = 0;
+                PC++;
+                cyclesToBurn = 4;
+
+            case 0xFB:
+                //ei
+                //Z- N- H- C-
+                IME = 1;
+                PC++;
                 cyclesToBurn = 4;
         }
     }
