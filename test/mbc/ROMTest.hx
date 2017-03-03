@@ -2,31 +2,45 @@ package mbc;
 
 import haxeboy.mbc.*;
 
-class ROMTest extends haxe.unit.TestCase {
-    var rom: MBC;
+import massive.munit.util.Timer;
+import massive.munit.Assert;
+import massive.munit.async.AsyncFactory;
 
-    override public function setup() {
+/**
+* Auto generated ExampleTest for MassiveUnit. 
+* This is an example test class can be used as a template for writing normal and async tests 
+* Refer to munit command line tool for more information (haxelib run munit)
+*/
+class ROMTest 
+{
+	private var timer:Timer;
+	
+	public function new() 
+	{
+		
+	}
 
-    }
-
-    function test_ROM_ONLY_WRITE() {
-        rom = new ROM(false);
+    @Test 
+    public function test_ROM_ONLY_WRITE() {
+        var rom = new ROM(false);
 
         try {
             rom.setValue(0xA000, 0x1);
         }
         catch(e: Dynamic) {
-            assertTrue(true);
+            Assert.areEqual(e, 'attempted RAM access on unsupported hardware');
             return;
         }
-        assertTrue(false);
+        
+       throw 'should have thrown an error';
     }
 
+    @Test
     function test_ROM_RAM_WRITE() {
-        rom = new ROM(true);
+        var rom = new ROM(true);
 
         rom.setValue(0xA000, 0x1);
-
-        assertEquals(0x1, rom.getValue(0xA000));
+        
+        Assert.areEqual(0x1, rom.getValue(0xA000));
     }
 }
