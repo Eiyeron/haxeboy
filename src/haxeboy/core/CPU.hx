@@ -432,3 +432,12 @@ abstract Interrupt(Int) from Int to Int {
     var SERIAL = 0x58;
     var JOYPAD = 0x60;
 }
+
+@:enum
+abstract InterruptFlag(Int) from Int to Int {
+    var V_BLANK = 1 << 0;
+    var LCD_STAT = 1 << 1;
+    var TIMER = 1 << 2;
+    var SERIAL = 1 << 3;
+    var JOYPAD = 1 << 4;
+}
