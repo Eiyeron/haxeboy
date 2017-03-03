@@ -423,3 +423,12 @@ class CPU {
         return value;
     }
 }
+
+@:enum
+abstract Interrupt(Int) from Int to Int {
+    var V_BLANK = 0x40;
+    var LCD_STAT = 0x48;
+    var TIMER = 0x50;
+    var SERIAL = 0x58;
+    var JOYPAD = 0x60;
+}
