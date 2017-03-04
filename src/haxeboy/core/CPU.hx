@@ -436,7 +436,7 @@ class CPU {
                 cyclesToBurn = 4;
             case 0x10:
                 // stop (supposed to jump next instruction)
-                //
+                //Z- N- H- C-
                 stop_requested = true;
                 PC += 2;
                 cyclesToBurn = 4;

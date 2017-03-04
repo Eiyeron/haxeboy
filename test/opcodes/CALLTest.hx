@@ -26,5 +26,8 @@ class CALLTest extends OpcodeTest {
         gb.run();
 
         Assert.areEqual(0x0003, gb.cpu.BC);
+        Assert.areEqual(68, gb.cpu.cycles); //would be 72 with the NOP but it stops at the STOP
+        Assert.areEqual(0x6, gb.cpu.PC);
+        Assert.areEqual(0xFFFE, gb.cpu.SP);
     }
 }
