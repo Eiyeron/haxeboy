@@ -15,8 +15,7 @@ class CALLTest extends OpcodeTest {
         routine.writeByteBuffer([
             0xCD, 0x0, 0x6,
             0x03,
-            STOP,
-            0x00,
+            STOP, 0x00,
             0x03,
             0x03,
             0xC9]);
