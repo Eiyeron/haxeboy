@@ -32,7 +32,7 @@ class ROMTest
             return;
         }
         
-       throw 'should have thrown an error';
+       Assert.fail('should have thrown an error');
     }
 
     @Test
