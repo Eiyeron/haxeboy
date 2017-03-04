@@ -10,7 +10,7 @@ using opcodes.TestTools;
 class CALLTest extends OpcodeTest {
 
     @Test
-    function test_CALL() {
+    function test_CALL_RET() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([
             0xCD, 0x0, 0x5,
