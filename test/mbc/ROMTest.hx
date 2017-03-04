@@ -6,19 +6,11 @@ import massive.munit.util.Timer;
 import massive.munit.Assert;
 import massive.munit.async.AsyncFactory;
 
-/**
-* Auto generated ExampleTest for MassiveUnit. 
-* This is an example test class can be used as a template for writing normal and async tests 
-* Refer to munit command line tool for more information (haxelib run munit)
-*/
 class ROMTest 
 {
 	private var timer:Timer;
 	
-	public function new() 
-	{
-		
-	}
+	public function new() {}
 
     @Test 
     public function test_ROM_ONLY_WRITE() {
@@ -42,5 +34,9 @@ class ROMTest
         rom.setValue(0xA000, 0x1);
         
         Assert.areEqual(0x1, rom.getValue(0xA000));
+
+        rom.setValue(0xA000, 0x0);
+
+        Assert.areEqual(0x0, rom.getValue(0xA000));
     }
 }

@@ -461,6 +461,58 @@ class CPU {
                 PC++;
                 op_ret();
 
+            case 0xC4:
+                //call nz a16
+                //Z- N- H- C-
+                PC++;
+                if(z == 0) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
+            case 0xCC:
+                //call z a16
+                //Z- N- H- C-
+                PC++;
+                if(z == 1) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
+            case 0xD4:
+                //call nc a16
+                //Z- N- H- C-
+                PC++;
+                if(C == 0) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
+            case 0xDC:
+                //call c a16
+                //Z- N- H- C-
+                PC++;
+                if(C == 1) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
             case 0xCD:
                 //call a16
                 //Z- N- H- C-
