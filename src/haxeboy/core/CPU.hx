@@ -541,6 +541,55 @@ class CPU {
                 IME = 1;
                 PC++;
                 cyclesToBurn = 4;
+
+            case 0xC7:
+                //rst 00
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x00);
+            case 0xCF:
+                //rst 08
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x08);
+            case 0xD7:
+                //rst 10
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x10);
+            case 0xDF:
+                //rst 18
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x18);
+            case 0xE7:
+                //rst 20
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x20);
+            case 0xEF:
+                //rst 28
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x28);
+            case 0xF7:
+                //rst 30
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x30);
+            case 0xFF:
+                //rst 38
+                //Z- N- H- C-
+                PC++;
+                cyclesToBurn = 16;
+                op_call(0x38);
         }
     }
 
