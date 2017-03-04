@@ -3,6 +3,8 @@ package haxeboy.core;
 import haxeboy.Cartridge;
 using haxeboy.core.Tools;
 
+using StringTools;
+
 class Memory {
 
 /* === Instance Fields === */
@@ -14,6 +16,8 @@ class Memory {
 	public var iop(default, null):IOP;
 	public var hram(default, null):HRAM;
 
+    public var enabled_interrupts: Int = 0xFF;
+
 	/* Constructor Function */
 	public function new():Void {
 
@@ -24,6 +28,8 @@ class Memory {
 		oam = new OAM();
 
 		hram = new HRAM();
+
+        iop = new IOP();
 	}
 
 /* === Instance Methods === */
@@ -71,7 +77,7 @@ class Memory {
         }
         // IO ports
         else if (address.inRange(0xFF00,0xFF7F)) {
-            //return iop.getValue(address - 0xFF00);
+            return iop.getValue(address - 0xFF00);
             return 0;
         }
         // HRAM (High RAM)
@@ -80,8 +86,7 @@ class Memory {
         }
         // Interrupt enabler
         else if (address == 0xFFFF) {
-            // return interrupt_enabler;
-            return 0xFF;
+            return enabled_interrupts;
         }
         else {
             // throw MemoryAccesException('Out of Bounds');
@@ -132,8 +137,7 @@ class Memory {
         }
         // IO ports
         else if(address.inRange(0xFF00, 0xFF7F)) {
-            // return iop.setValue(address - 0xFF00, value);
-            return;
+            return iop.setValue(address - 0xFF00, value);
         }
         // HRAM (High RAM)
         else if(address.inRange(0xFF80, 0xFFFE)) {
@@ -141,13 +145,18 @@ class Memory {
         }
         // Interrupt enabler
         else if(address == 0xFFFF){
-            // interrupt_enabler = value;
+            enabled_interrupts = value;
             return ;
         }
         else {
             // throw MemoryAccesException('Out of Bounds');
             return ;
         }
+    }
+
+    public inline function setValue16(address:Int, value: Int) {
+        setValue(address, value >> 8);
+        setValue(address + 1, value & 0xFF);
     }
 
 	public inline function getValue16(address:Int) {

@@ -1,8 +1,10 @@
 import massive.munit.TestSuite;
 
 import ExampleTest;
+import interrupts.InterruptTest;
 import mbc.ROMTest;
 import opcodes.ADDTest;
+import opcodes.CALLTest;
 import opcodes.DECTest;
 import opcodes.INCTest;
 import opcodes.LDTest;
@@ -24,8 +26,10 @@ class TestSuite extends massive.munit.TestSuite
 		super();
 
 		add(ExampleTest);
+		add(interrupts.InterruptTest);
 		add(mbc.ROMTest);
 		add(opcodes.ADDTest);
+		add(opcodes.CALLTest);
 		add(opcodes.DECTest);
 		add(opcodes.INCTest);
 		add(opcodes.LDTest);

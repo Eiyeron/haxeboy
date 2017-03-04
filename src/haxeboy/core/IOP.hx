@@ -1,14 +1,19 @@
-package haxeboy;
+package haxeboy.core;
+
+import haxe.io.Bytes;
+import haxe.io.UInt8Array;
 
 using haxeboy.core.Tools;
-
 import haxeboy.core.MemoryMappable;
 import haxeboy.io.Joypad;
 import haxeboy.io.Serial;
 import haxeboy.io.Timer;
 import haxeboy.io.Palette;
 
+
 class IOP implements MemoryMappable {
+
+    var data: UInt8Array;
 
     var joypad:Joypad;
 
@@ -41,6 +46,7 @@ class IOP implements MemoryMappable {
         joypad = new Joypad();
         serial_port = new Serial();
         timer = new Timer();
+        data = new UInt8Array(0x7F);
         // TODO : assign the other registers default values
     }
 
@@ -81,47 +87,48 @@ class IOP implements MemoryMappable {
 
             // TODO: determine what to do when accessing non mapped addresses.
             default:
-                return 0x00;
+                return data.get(address);
         }
     }
 
     public function setValue(address:Int, value:Int) {
-            if (address == 0x00)
-                return joypad.setValue(address, value);
-            else if(address.inRange(0x01, 0x02)) {
-                return serial_port.setValue(address - 0x01, value);
-            }
-            else if(address.inRange(0x04, 0x07)) {
-                return timer.setValue(address - 0x04, value);
-            }
-            else switch(address) {
-                case 0x40:
-                lcd_control = value;
-                case 0x41:
-                lcd_stat = value;
-                case 0x42:
-                lcd_scy = value;
-                case 0x43:
-                lcd_scx = value;
-                case 0x44:
-                lcd_ly = value;
-                case 0x45:
-                lcd_lyc = value;
-                case 0x46:
-                lcd_dma_transfer_address = value;
-                case 0x47:
-                bg_palette = value;
-                case 0x48:
-                obj0_palette = value;
-                case 0x49:
-                obj1_palette = value;
-                case 0x4A:
-                lcd_wy = value;
-                case 0x4B:
-                lcd_wx = value;
+        if (address == 0x00)
+            return joypad.setValue(address, value);
+        else if(address.inRange(0x01, 0x02)) {
+            return serial_port.setValue(address - 0x01, value);
+        }
+        else if(address.inRange(0x04, 0x07)) {
+            return timer.setValue(address - 0x04, value);
+        }
+        else switch(address) {
+            case 0x40:
+            lcd_control = value;
+            case 0x41:
+            lcd_stat = value;
+            case 0x42:
+            lcd_scy = value;
+            case 0x43:
+            lcd_scx = value;
+            case 0x44:
+            lcd_ly = value;
+            case 0x45:
+            lcd_lyc = value;
+            case 0x46:
+            lcd_dma_transfer_address = value;
+            case 0x47:
+            bg_palette = value;
+            case 0x48:
+            obj0_palette = value;
+            case 0x49:
+            obj1_palette = value;
+            case 0x4A:
+            lcd_wy = value;
+            case 0x4B:
+            lcd_wx = value;
 
             // TODO: determine what to do when accessing non mapped addresses.
             default:
+                data.set(address, value);
         }
     }
 }

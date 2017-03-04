@@ -1,5 +1,7 @@
 package haxeboy.core;
 
+using StringTools;
+
 class CPU {
     /// Registers ///
 
@@ -63,7 +65,7 @@ class CPU {
         BC = 0;
         DE = 0;
         HL = 0;
-        SP = 0;
+        SP = 0xFFFE;
         PC = 0;
         cycles = 0;
         cyclesToBurn = 0;
@@ -74,49 +76,71 @@ class CPU {
     /// Mockup of eventual API ///
     public var memory:Memory;
 
-    public function step() {
+    public function step(ignoreCycles: Bool = false) {
+        var interrupts: Int = memory.getValue(0xFF0F);
+        var enabledInterrupts: Int = memory.getValue(0xFFFF);
+        if(IME == 1 && interrupts != 0 && enabledInterrupts != 0) {
+            halted = false;
+            IME = 0;
+            if(enabledInterrupts & interrupts & InterruptFlag.V_BLANK != 0) {
+                interrupts &= ~InterruptFlag.V_BLANK;
+                memory.setValue(0xFF0F, interrupts);
+                op_call(Interrupt.V_BLANK);
+                return;
+            }
+            if(enabledInterrupts & interrupts & InterruptFlag.LCD_STAT != 0) {
+                interrupts &= ~InterruptFlag.LCD_STAT;
+                memory.setValue(0xFF0F, interrupts);
+                op_call(Interrupt.LCD_STAT);
+                return;
+            }
+            if(enabledInterrupts & interrupts & InterruptFlag.TIMER != 0) {
+                interrupts &= ~InterruptFlag.TIMER;
+                memory.setValue(0xFF0F, interrupts);
+                op_call(Interrupt.TIMER);
+                return;
+            }
+            if(enabledInterrupts & interrupts & InterruptFlag.SERIAL != 0) {
+                interrupts &= ~InterruptFlag.SERIAL;
+                memory.setValue(0xFF0F, interrupts);
+                op_call(Interrupt.SERIAL);
+                return;
+            }
+            if(enabledInterrupts & interrupts & InterruptFlag.JOYPAD != 0) {
+                interrupts &= ~InterruptFlag.JOYPAD;
+                memory.setValue(0xFF0F, interrupts);
+                op_call(Interrupt.JOYPAD);  
+                return;  
+            }
+        }
+
         // TODO : stuff
         if(halted)
             return;
-
-        var interrupts: Int = memory.getValue(0xFF0F);
-        if(interrupts != 0) {
-            if(interrupts & InterruptFlag.V_BLANK != 0) {
-                interrupts &= ~InterruptFlag.V_BLANK;
-                call(Interrupt.V_BLANK);
-            }
-            if(interrupts & InterruptFlag.LCD_STAT != 0) {
-                interrupts &= ~InterruptFlag.LCD_STAT;
-                call(Interrupt.LCD_STAT);
-
-            }
-            if(interrupts & InterruptFlag.TIMER != 0) {
-                interrupts &= ~InterruptFlag.TIMER;
-                call(Interrupt.TIMER);
-            }
-            if(interrupts & InterruptFlag.SERIAL != 0) {
-                interrupts &= ~InterruptFlag.SERIAL;
-                call(Interrupt.SERIAL);
-            }
-            if(interrupts & InterruptFlag.JOYPAD != 0) {
-                interrupts &= ~InterruptFlag.JOYPAD;
-                call(Interrupt.JOYPAD);    
-            }
-        }
 
         var opcode:Int = memory.getValue(PC);
 
         if (cyclesToBurn > 0) {
             cyclesToBurn--;
             cycles++;
-            return;
+            if(!ignoreCycles) {
+                return;
+            }
+            else {
+                while(cyclesToBurn > 0) {
+                    cyclesToBurn--;
+                    cycles++;
+                }
+            }
         }
         if(halt_requested) {
             halted = true;
+            halt_requested = false;
             return;
         }
         if(stop_requested) {
             stopped = true;
+            stop_requested = false;
             return;
         }
 
@@ -126,8 +150,15 @@ class CPU {
         cycles++;
     }
 
-    function call(address: Int) {
-        //TODO: DO SOMETHING
+    function op_call(address: Int) {
+        SP -= 2;
+        memory.setValue16(SP, PC);
+        PC = address;
+    }
+
+    function op_ret() {
+        PC = memory.getValue16(SP);
+        SP += 2;
     }
 
     /// Register getters ///
@@ -405,7 +436,7 @@ class CPU {
                 cyclesToBurn = 4;
             case 0x10:
                 // stop (supposed to jump next instruction)
-                //
+                //Z- N- H- C-
                 stop_requested = true;
                 PC += 2;
                 cyclesToBurn = 4;
@@ -422,6 +453,80 @@ class CPU {
                 halt_requested = true;
                 PC += 1;
                 cyclesToBurn = 4;
+
+            case 0xC9:
+                //ret
+                //Z- N- H- C-
+                cyclesToBurn = 16;
+                PC++;
+                op_ret();
+
+            case 0xC4:
+                //call nz a16
+                //Z- N- H- C-
+                PC++;
+                if(z == 0) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
+            case 0xCC:
+                //call z a16
+                //Z- N- H- C-
+                PC++;
+                if(z == 1) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
+            case 0xD4:
+                //call nc a16
+                //Z- N- H- C-
+                PC++;
+                if(C == 0) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
+            case 0xDC:
+                //call c a16
+                //Z- N- H- C-
+                PC++;
+                if(C == 1) {
+                    cyclesToBurn = 24;
+                    op_call(take16BitValue());
+                }
+                else {
+                    PC += 2;
+                    cyclesToBurn = 12;
+                }
+
+            case 0xCD:
+                //call a16
+                //Z- N- H- C-
+                cyclesToBurn = 24;
+                PC++;
+                op_call(take16BitValue());
+
+            case 0xD9:
+                //reti
+                //Z- N- H- C-
+                cyclesToBurn = 16;
+                PC++;
+                IME = 1;
+                op_ret();
 
             case 0xF3:
                 //di
