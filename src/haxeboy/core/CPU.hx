@@ -78,34 +78,35 @@ class CPU {
 
     public function step(ignoreCycles: Bool = false) {
         var interrupts: Int = memory.getValue(0xFF0F);
-        if(IME == 1 && interrupts != 0) {
+        var enabledInterrupts: Int = memory.getValue(0xFFFF);
+        if(IME == 1 && interrupts != 0 && enabledInterrupts != 0) {
             halted = false;
             IME = 0;
-            if(interrupts & InterruptFlag.V_BLANK != 0) {
+            if(enabledInterrupts & interrupts & InterruptFlag.V_BLANK != 0) {
                 interrupts &= ~InterruptFlag.V_BLANK;
                 memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.V_BLANK);
                 return;
             }
-            if(interrupts & InterruptFlag.LCD_STAT != 0) {
+            if(enabledInterrupts & interrupts & InterruptFlag.LCD_STAT != 0) {
                 interrupts &= ~InterruptFlag.LCD_STAT;
                 memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.LCD_STAT);
                 return;
             }
-            if(interrupts & InterruptFlag.TIMER != 0) {
+            if(enabledInterrupts & interrupts & InterruptFlag.TIMER != 0) {
                 interrupts &= ~InterruptFlag.TIMER;
                 memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.TIMER);
                 return;
             }
-            if(interrupts & InterruptFlag.SERIAL != 0) {
+            if(enabledInterrupts & interrupts & InterruptFlag.SERIAL != 0) {
                 interrupts &= ~InterruptFlag.SERIAL;
                 memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.SERIAL);
                 return;
             }
-            if(interrupts & InterruptFlag.JOYPAD != 0) {
+            if(enabledInterrupts & interrupts & InterruptFlag.JOYPAD != 0) {
                 interrupts &= ~InterruptFlag.JOYPAD;
                 memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.JOYPAD);  

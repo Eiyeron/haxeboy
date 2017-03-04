@@ -32,9 +32,11 @@ class Gameboy {
     public function run() {
         turned_on = true;
 
+        var steps: Int = 0;
         while(turned_on && !cpu.stopped) {
             cpu.step();
-            if(limit != 0 && cpu.cycles>limit) {
+            steps++;
+            if(limit != 0 && steps>limit) {
                 throw 'stepped over limit';
             }
         }

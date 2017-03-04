@@ -16,6 +16,8 @@ class Memory {
 	public var iop(default, null):IOP;
 	public var hram(default, null):HRAM;
 
+    public var enabled_interrupts: Int = 0xFF;
+
 	/* Constructor Function */
 	public function new():Void {
 
@@ -84,8 +86,7 @@ class Memory {
         }
         // Interrupt enabler
         else if (address == 0xFFFF) {
-            // return interrupt_enabler;
-            return 0xFF;
+            return enabled_interrupts;
         }
         else {
             // throw MemoryAccesException('Out of Bounds');
@@ -144,7 +145,7 @@ class Memory {
         }
         // Interrupt enabler
         else if(address == 0xFFFF){
-            // interrupt_enabler = value;
+            enabled_interrupts = value;
             return ;
         }
         else {
