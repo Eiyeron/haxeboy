@@ -13,9 +13,10 @@ class CALLTest extends OpcodeTest {
     function test_CALL_RET() {
         var routine = Bytes.alloc(ROM.ROM_BANK_SIZE);
         routine.writeByteBuffer([
-            0xCD, 0x0, 0x5,
+            0xCD, 0x0, 0x6,
             0x03,
             STOP,
+            0x00,
             0x03,
             0x03,
             0xC9]);
