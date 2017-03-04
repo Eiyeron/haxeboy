@@ -460,6 +460,51 @@ class CPU {
                 cyclesToBurn = 16;
                 PC++;
                 op_ret();
+            
+            case 0xC0:
+                //ret nz
+                //Z- N- H- C-
+                PC++;
+                if(z == 0) {
+                    cyclesToBurn = 20;
+                    op_ret();
+                }
+                else {
+                    cyclesToBurn = 8;
+                }
+            case 0xC8:
+                //ret z
+                //Z- N- H- C-
+                PC++;
+                if(z == 1) {
+                    cyclesToBurn = 20;
+                    op_ret();
+                }
+                else {
+                    cyclesToBurn = 8;
+                }
+            case 0xD0:
+                //ret nc
+                //Z- N- H- C-
+                PC++;
+                if(C == 0) {
+                    cyclesToBurn = 20;
+                    op_ret();
+                }
+                else {
+                    cyclesToBurn = 8;
+                }
+            case 0xD8:
+                //ret nz
+                //Z- N- H- C-
+                PC++;
+                if(C == 1) {
+                    cyclesToBurn = 20;
+                    op_ret();
+                }
+                else {
+                    cyclesToBurn = 8;
+                }
 
             case 0xC4:
                 //call nz a16
