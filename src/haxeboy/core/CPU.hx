@@ -78,8 +78,9 @@ class CPU {
 
     public function step(ignoreCycles: Bool = false) {
         var interrupts: Int = memory.getValue(0xFF0F);
-        if(interrupts != 0) {
+        if(IME == 1 && interrupts != 0) {
             halted = false;
+            IME = 0;
             if(interrupts & InterruptFlag.V_BLANK != 0) {
                 interrupts &= ~InterruptFlag.V_BLANK;
                 memory.setValue(0xFF0F, interrupts);
@@ -304,7 +305,6 @@ class CPU {
                 // inc BC
                 // Z- n- H- C-
                 BC++;
-                trace('inc');
                 PC += 1;
                 cyclesToBurn = 8;
             case 0x04:
@@ -466,6 +466,14 @@ class CPU {
                 cyclesToBurn = 24;
                 PC++;
                 op_call(take16BitValue());
+
+            case 0xD9:
+                //reti
+                //Z- N- H- C-
+                cyclesToBurn = 16;
+                PC++;
+                IME = 1;
+                op_ret();
 
             case 0xF3:
                 //di

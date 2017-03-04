@@ -15,6 +15,7 @@ class InterruptTest {
     @Before
     public function setup() {
         gb = new Gameboy(10000);
+        gb.cpu.IME = 1;
     }
 
     @Test
@@ -103,13 +104,13 @@ class InterruptTest {
         routine.writeByteBuffer([0x76]);
 
         routine.set(0x40, 0x03);
-        routine.set(0x41, 0xC9);
+        routine.set(0x41, 0xD9);
         routine.set(0x48, 0x03);
-        routine.set(0x49, 0xC9);
+        routine.set(0x49, 0xD9);
         routine.set(0x50, 0x03);
-        routine.set(0x51, 0xC9);
+        routine.set(0x51, 0xD9);
         routine.set(0x58, 0x03);
-        routine.set(0x59, 0xC9);
+        routine.set(0x59, 0xD9);
         routine.set(0x60, 0x03);
         routine.set(0x61, STOP);
 
