@@ -76,49 +76,69 @@ class CPU {
     /// Mockup of eventual API ///
     public var memory:Memory;
 
-    public function step() {
-        // TODO : stuff
-        if(halted)
-            return;
-
+    public function step(ignoreCycles: Bool = false) {
         var interrupts: Int = memory.getValue(0xFF0F);
         if(interrupts != 0) {
+            halted = false;
             if(interrupts & InterruptFlag.V_BLANK != 0) {
                 interrupts &= ~InterruptFlag.V_BLANK;
+                memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.V_BLANK);
+                return;
             }
             if(interrupts & InterruptFlag.LCD_STAT != 0) {
                 interrupts &= ~InterruptFlag.LCD_STAT;
+                memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.LCD_STAT);
-
+                return;
             }
             if(interrupts & InterruptFlag.TIMER != 0) {
                 interrupts &= ~InterruptFlag.TIMER;
+                memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.TIMER);
+                return;
             }
             if(interrupts & InterruptFlag.SERIAL != 0) {
                 interrupts &= ~InterruptFlag.SERIAL;
+                memory.setValue(0xFF0F, interrupts);
                 op_call(Interrupt.SERIAL);
+                return;
             }
             if(interrupts & InterruptFlag.JOYPAD != 0) {
                 interrupts &= ~InterruptFlag.JOYPAD;
-                op_call(Interrupt.JOYPAD);    
+                memory.setValue(0xFF0F, interrupts);
+                op_call(Interrupt.JOYPAD);  
+                return;  
             }
         }
+
+        // TODO : stuff
+        if(halted)
+            return;
 
         var opcode:Int = memory.getValue(PC);
 
         if (cyclesToBurn > 0) {
             cyclesToBurn--;
             cycles++;
-            return;
+            if(!ignoreCycles) {
+                return;
+            }
+            else {
+                while(cyclesToBurn > 0) {
+                    cyclesToBurn--;
+                    cycles++;
+                }
+            }
         }
         if(halt_requested) {
             halted = true;
+            halt_requested = false;
             return;
         }
         if(stop_requested) {
             stopped = true;
+            stop_requested = false;
             return;
         }
 
@@ -136,7 +156,6 @@ class CPU {
 
     function op_ret() {
         PC = memory.getValue16(SP);
-        trace(PC);
         SP += 2;
     }
 
@@ -285,6 +304,7 @@ class CPU {
                 // inc BC
                 // Z- n- H- C-
                 BC++;
+                trace('inc');
                 PC += 1;
                 cyclesToBurn = 8;
             case 0x04:
