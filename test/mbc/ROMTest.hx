@@ -16,15 +16,7 @@ class ROMTest
     public function test_ROM_ONLY_WRITE() {
         var rom = new ROM(false);
 
-        try {
-            rom.setValue(0xA000, 0x1);
-        }
-        catch(e: Dynamic) {
-            Assert.areEqual(e, 'attempted RAM access on unsupported hardware');
-            return;
-        }
-        
-       Assert.fail('should have thrown an error');
+        Assert.throws(String, rom.setValue.bind(0xA000, 0x1));
     }
 
     @Test
