@@ -21,6 +21,7 @@ class CPU {
 
 
     // General registers
+    //TODO: Macros or Object wrapper to allow increment(variable) instead of huge opcode copypaste
     public var B:Int;
     public var C:Int;
     public var BC(get, set):Int;
@@ -195,7 +196,7 @@ class CPU {
     }
 
     /// Register setters ///
-
+    //TODO: DO THESE NEED CARRY OVERFLOW FLAGS???
     public function set_AF(value:Int):Int {
         A = (value >> 8) & 0xFF;
         F = value & 0xFF;
@@ -203,7 +204,6 @@ class CPU {
     }
 
     public function set_BC(value:Int):Int {
-
         B = (value >> 8) & 0xFF;
         C = value & 0xFF;
         return value & 0xFFFF;
@@ -296,18 +296,78 @@ class CPU {
                 BC = take16BitValue();
 
                 cyclesToBurn = 12;
+            case 0x11:
+                // ld DE,nn
+                // Z- n- H- C-
+                PC++;
+                DE = take16BitValue();
+
+                cyclesToBurn = 12;
+            case 0x21:
+                // ld HL,nn
+                // Z- n- H- C-
+                PC++;
+                HL = take16BitValue();
+
+                cyclesToBurn = 12;
+            case 0x31:
+                // ld SP,nn
+                // Z- n- H- C-
+                PC++;
+                SP = take16BitValue();
+
+                cyclesToBurn = 12;
+
             case 0x02:
                 // ld (BC),a
                 // Z- n- H- C-
                 memory.setValue(BC, A);
                 PC += 1;
                 cyclesToBurn = 8;
+            case 0x12:
+                // ld (DE),a
+                // Z- n- H- C-
+                memory.setValue(DE, A);
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x22:
+                // ld (HL+),a
+                // Z- n- H- C-
+                memory.setValue(HL++, A);
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x32:
+                // ld (HL-),a
+                // Z- n- H- C-
+                memory.setValue(HL--, A);
+                PC += 1;
+                cyclesToBurn = 8;
+
             case 0x03:
                 // inc BC
                 // Z- n- H- C-
                 BC++;
                 PC += 1;
                 cyclesToBurn = 8;
+            case 0x13:
+                // inc DE
+                // Z- n- H- C-
+                DE++;
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x23:
+                // inc HL
+                // Z- n- H- C-
+                HL++;
+                PC += 1;
+                cyclesToBurn = 8;
+            case 0x33:
+                // inc SP
+                // Z- n- H- C-
+                SP++;
+                PC += 1;
+                cyclesToBurn = 8;
+
             case 0x04:
                 // inc B
                 // Zs n0 Hs C-
@@ -320,6 +380,35 @@ class CPU {
 
                 PC += 1;
                 cyclesToBurn = 4;
+            case 0x14:
+                // inc D
+                // Zs n0 Hs C-
+                var Dp = D;
+                D = (D + 1) % 256;
+                z = (D == 0 ? 1 : 0);
+                n = 0;
+                // If the lower nibble overdflowed, so raise the half-carry.
+                h = get_half_carry_from_addition(Dp, 1);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x24:
+                // inc H
+                // Zs n0 Hs C-
+                var Hp = H;
+                H = (H + 1) % 256;
+                z = (H == 0 ? 1 : 0);
+                n = 0;
+                // If the lower nibble overdflowed, so raise the half-carry.
+                h = get_half_carry_from_addition(Hp, 1);
+
+                PC += 1;
+                cyclesToBurn = 4;
+            case 0x34:
+                // inc (HL)
+                // Zs n0 Hs C-
+               //TODO:
+
             case 0x05:
                 // dec B
                 // Zs n1 Hs C-
@@ -441,12 +530,6 @@ class CPU {
                 PC += 2;
                 cyclesToBurn = 4;
 
-            case 0x11:
-                //ld de, d16
-                //Z- N- H- C-
-                PC++;
-                DE = take16BitValue();
-                cyclesToBurn = 12;
             // ...
             case 0x76:
                 // halt
